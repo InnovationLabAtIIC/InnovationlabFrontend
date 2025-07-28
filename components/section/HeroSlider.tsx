@@ -7,6 +7,9 @@ const slides = [
   { id: 1, image: 'https://picsum.photos/id/1015/1200/400', alt: 'Slide 1', caption: 'First Slide' },
   { id: 2, image: 'https://picsum.photos/id/1016/1200/400', alt: 'Slide 2', caption: 'Second Slide' },
   { id: 3, image: 'https://picsum.photos/id/1018/1200/400', alt: 'Slide 3', caption: 'Third Slide' },
+  { id: 4, image: 'https://picsum.photos/id/1020/1200/400', alt: 'Slide 4', caption: 'Fourth Slide' },
+  { id: 5, image: 'https://picsum.photos/id/1024/1200/400', alt: 'Slide 5', caption: 'Fifth Slide' },
+  { id: 6, image: 'https://picsum.photos/id/1025/1200/400', alt: 'Slide 6', caption: 'Sixth Slide' },
 ]
 
 export default function HeroSlider() {
