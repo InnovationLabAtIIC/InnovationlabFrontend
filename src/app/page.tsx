@@ -1,3 +1,4 @@
+import HeroSlider from "../../components/section/HeroSlider";
 import NavBar from "../../components/section/NavBar";
 import Button from "../../components/ui/Button";
 
@@ -5,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <div className=" w-full h-[80vh] flex items-center justify-center ">
+      <div className=" w-full h-auto flex items-center justify-center ">
         <div className="w-full h-full max-w-[1240px] p-4 mt-8">
           <div className="flex flex-col gap-2">
             <h1 className=" text-5xl md:text-[8.2vw] font-bold">INNOVATION LABS</h1>
@@ -16,6 +17,9 @@ export default function Home() {
             <Button>Get Started</Button>
           </div>
         </div>
+      </div>
+      <div>
+        <HeroSlider/>
       </div>
     </div>
   );
