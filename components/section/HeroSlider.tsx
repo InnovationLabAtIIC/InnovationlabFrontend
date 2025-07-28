@@ -16,7 +16,7 @@ export default function HeroSlider() {
   const [emblaRef] = useEmblaCarousel({ loop: true })
 
   return (
-    <div className='mt-8 md:mt-10'>
+    <div className='mt-0'>
       <div className="overflow-hidden w-screen h-72 md:h-128" ref={emblaRef}>
         <div className="flex">
           {slides.map((slide) => (
