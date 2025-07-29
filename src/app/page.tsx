@@ -1,8 +1,15 @@
 'use client'
 
+import { Accordion, AccordionItem } from "@heroui/react";
+import { AnimatedList } from "../../components/section/AnimatedFAQ";
+import Events from "../../components/section/Events";
 import Hero from "../../components/section/Hero";
 import NavBar from "../../components/section/NavBar";
+import Updates from "../../components/section/Updates";
 import Button from "../../components/ui/Button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+//import { motion } from "framer-motion";
 
 export default function Home() {
   return (
@@ -11,87 +18,80 @@ export default function Home() {
       <Hero />
       <Missions />
       <Events />
+      <Updates />
+      <FAQs />
     </div>
   );
 }
 
-function Missions() {
-  return (
-    <div className="w-screen h-screen flex justify-center my-0 bg-emerald-500 pb-16">
-      <div className="max-w-[1240px] w-full my-0 h-auto mt-0 flex flex-col md:px-0 px-4">
-        <h2 className=" font-bold text-[8vw] md:text-[5vw] -translate-y-5 md:-translate-y-16 text-white text-center">OUR MISSIONS</h2>
-      </div>
-    </div>
-  )
-}
-
-function Events() {
-
-  const EVENTS = [
+function FAQs() {
+  const faqItems = [
     {
-      id: 1,
-      bg: 'bg-red-500',
-      name: 'SUMMER ENRICHMENT',
-      desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-      button: 'red'
+      title: "What is IVLAB?",
+      description: "IVLAB is a platform for innovation and collaboration in various fields.",
+      bg: "bg-blue-500",
     },
     {
-      id: 2,
-      bg: 'bg-purple-500',
-      name: 'IIC QUEST',
-      desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-      button: 'purple'
+      title: "How can I join IVLAB?",
+      description: "You can join IVLAB by signing up on our website and participating in our events.",
+      bg: "bg-green-500",
     },
     {
-      id: 3,
-      bg: 'bg-green-500',
-      name: 'CREATIVE CLASH',
-      desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-      button: 'green'
+      title: "Are there any membership fees?",
+      description: "No, membership is currently free for all participants.",
+      bg: "bg-yellow-500",
+    },
+    {
+      title: "Where are you located?",
+      description: "We are based in D:/IVLAB, but our events are open to everyone online.",
+      bg: "bg-purple-500",
     },
   ];
 
-  if (EVENTS.length === 0) return null;
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const handleToggle = (idx: number) => {
+    setOpenIndex(openIndex === idx ? null : idx);
+  };
 
   return (
-    <div className="w-screen h-auto bg-black flex items-start justify-center pb-12 relative overflow-hidden">
-      {/* Grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none z-0"
-        aria-hidden="true"
-        style={{
-          backgroundImage: `
-        linear-gradient(to right, rgba(255,255,255,0.15) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.15) 1px, transparent 1px)
-        `,
-          backgroundSize: '64px 64px',
-          width: '100%',
-          height: '100%',
-        }}
-      />
-      <div></div>
-      <div className="max-w-[1240px] w-full h-auto mt-0 flex flex-col md:px-0 p-4 relative z-10">
-        <h2 className=" font-bold text-[8vw] md:text-[5vw]  text-white text-left my-6 md:my-12">EVENTS</h2>
-        <div className="w-full h-auto mt-3 md:mt-10 flex flex-col gap-16 md:gap-32">
-          {EVENTS.map((item) => (
-            <div key={item.id} className="w-full md:h-96 h-auto relative ">
-              <div className="w-full h-full relative flex flex-col md:flex-row z-10">
-                <div className="w-full md:w-96 h-64 md:h-96 bg-gray-800 relative flex-shrink-0">
-                  <div className={`flex w-full h-full ${item.bg} translate-y-2 -translate-x-2 `}></div>
-                  <div className="md:flex w-full h-full bg-gray-800 absolute top-0 md:translate-x-12 md:-translate-y-12"></div>
-                </div>
-                <div className="w-full md:w-[calc(100%-24rem)] h-auto md:h-96 py-6 md:py-0 md:px-8 md:pl-24 flex flex-col justify-start">
-                  <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 md:mb-4">{item.name}</h3>
-                  <p className="text-base md:text-lg text-gray-200 mb-4 md:mb-6">
-                    {item.desc}
-                  </p>
-                  <div>
-                    <Button bg={item.button}>
-                      EXPLORE
-                    </Button>
-                  </div>
-                </div>
+    <div className="w-screen min-h-screen h-auto flex justify-center pb-16 my-0">
+      <div className="max-w-[1240px] w-full h-auto mt-0 flex flex-col px-4 md:px-0 my-0">
+        <h2 className="font-bold text-left text-black my-6 md:my-12 text-[8vw] md:text-[5vw]">
+          FAQS
+        </h2>
+        <div>
+          {faqItems.map((item, idx) => (
+            <div
+              key={idx}
+              className={`w-full rounded-lg cursor-pointer ${item.bg} px-6 py-8 mt-4`}
+              onClick={() => handleToggle(idx)}
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-3xl text-left text-white font-bold">{item.title}</h3>
+                <motion.span
+                  animate={{ rotate: openIndex === idx ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="ml-4 text-white text-2xl"
+                >
+                  ▶
+                </motion.span>
               </div>
+              <AnimatePresence initial={false}>
+                {openIndex === idx && (
+                  <motion.div
+                    key="content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-white text-xl mt-4">{item.description}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
         </div>
@@ -99,3 +99,15 @@ function Events() {
     </div>
   );
 }
+
+
+function Missions() {
+  return (
+    <div className="w-screen h-screen flex justify-center my-0  pb-16">
+      <div className="max-w-[1240px] w-full my-0 h-auto mt-0 flex flex-col md:px-0 px-4">
+      </div>
+    </div>
+  )
+}
+
+
