@@ -1,4 +1,7 @@
+'use client'
+
 import { motion } from 'framer-motion'
+import GridSectionDivider from '../ui/GridSectionDivider';
 
 const CATEGORY_COLORS: Record<string, string> = {
     "Program": "bg-rose-600",
@@ -10,7 +13,6 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function Updates() {
-    // Example blog data
     const BLOGS = [
         {
             id: 1,
@@ -69,40 +71,44 @@ export default function Updates() {
     ];
 
     return (
-        <div className="w-screen min-h-screen flex justify-center my-0 bg-black pb-12">
-            <div className="max-w-[1240px] w-full my-0 h-auto mt-0 flex flex-col md:px-0 px-4">
-                <h2 className="font-bold text-[8vw] md:text-[5vw] text-white text-left my-6 md:my-12">UPDATES</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {BLOGS.map((blog) => (
-                        <motion.div
-                            key={blog.id}
-                            className="relative overflow-hidden flex flex-col w-full h-auto pb-0 md:pb-12 cursor-pointer"
-                            whileHover={{
-                                scale: 1.02,
-                                transition: { type: "spring", stiffness: 300, damping: 20 },
-                            }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            <div className='w-full h-64'>
-                                <div className={`${CATEGORY_COLORS[blog.category] || "bg-gray-400"} h-54 absolute top-10 left-0 w-10/12 z-0`} />
-                                <motion.img
-                                    src={blog.image}
-                                    alt={""}
-                                    className="w-full h-64 bg-white object-cover translate-x-4 -translate-y-4 relative z-10"
-                                    whileHover={{
-                                        scale: 1.04,
-                                        transition: { type: "spring", stiffness: 200, damping: 18 },
-                                    }}
-                                />
-                            </div>
-                            <div className="p-0 flex flex-col flex-1 mt-4 relative z-10">
-                                <h3 className="text-xl md:text-3xl font-bold mb-2 text-white">{blog.title}</h3>
-                                <span className="text-md md:text-xl text-white mb-2">{blog.date}</span>
-                            </div>
-                        </motion.div>
-                    ))}
+        <>
+            <GridSectionDivider />
+
+            <div className="w-screen min-h-screen flex justify-center my-0 bg-gray-800 pb-12">
+                <div className="max-w-[1240px] w-full my-0 h-auto mt-0 flex flex-col md:px-0 px-4">
+                    <h2 className="font-bold text-[8vw] md:text-[5vw] text-white text-left my-6 md:my-12">UPDATES</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {BLOGS.map((blog) => (
+                            <motion.div
+                                key={blog.id}
+                                className="relative overflow-hidden flex flex-col w-full h-auto pb-0 md:pb-12 cursor-pointer"
+                                whileHover={{
+                                    scale: 1.02,
+                                    transition: { type: "spring", stiffness: 300, damping: 20 },
+                                }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                <div className='w-full h-64'>
+                                    <div className={`${CATEGORY_COLORS[blog.category] || "bg-gray-400"} h-54 absolute top-10 left-0 w-10/12 z-0`} />
+                                    <motion.img
+                                        src={blog.image}
+                                        alt={""}
+                                        className="w-full h-64 bg-white object-cover translate-x-4 -translate-y-4 relative z-10"
+                                        whileHover={{
+                                            scale: 1.04,
+                                            transition: { type: "spring", stiffness: 200, damping: 18 },
+                                        }}
+                                    />
+                                </div>
+                                <div className="p-0 flex flex-col flex-1 mt-4 relative z-10">
+                                    <h3 className="text-xl md:text-3xl font-bold mb-2 text-white">{blog.title}</h3>
+                                    <span className="text-md md:text-xl text-white mb-2">{blog.date}</span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

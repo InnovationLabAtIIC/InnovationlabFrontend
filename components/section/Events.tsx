@@ -36,7 +36,6 @@ export default function Events() {
 
     return (
         <>
-            {/* <GridSectionDivider /> */}
             <div className="w-screen h-auto bg-black flex items-start justify-center pb-12 relative overflow-hidden">
                 {/* <div
                 className="absolute inset-0 pointer-events-none z-0"

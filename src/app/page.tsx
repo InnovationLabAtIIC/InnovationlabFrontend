@@ -1,26 +1,19 @@
-'use client'
-
-import { Accordion, AccordionItem } from "@heroui/react";
-import { AnimatedList } from "../../components/section/AnimatedFAQ";
 import Events from "../../components/section/Events";
 import Hero from "../../components/section/Hero";
 import NavBar from "../../components/section/NavBar";
 import Updates from "../../components/section/Updates";
-import Button from "../../components/ui/Button";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { Icon, IconArrowRight } from "@tabler/icons-react";
 import FAQs from "../../components/section/FAQS";
-//import { motion } from "framer-motion";
+import Testimonials from "../../components/section/Testimonials";
 
 export default function Home() {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <NavBar />
       <Hero />
       <Missions />
       <Events />
       <Updates />
+      <Testimonials/>
       <FAQs />
     </div>
   );
