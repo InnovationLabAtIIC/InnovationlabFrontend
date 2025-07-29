@@ -1,6 +1,7 @@
 'use client'
 
 import useEmblaCarousel from 'embla-carousel-react'
+import Image from 'next/image'
 import React from 'react'
 
 const slides = [
@@ -21,7 +22,14 @@ export default function HeroSlider() {
         <div className="flex">
           {slides.map((slide) => (
             <div key={slide.id} className="flex-[0_0_100%] w-full h-96 md:h-128 relative  md:flex-[0_0_33.3333%] md:w-1/3">
-              <img src={slide.image} alt={slide.alt} className="w-full h-full object-cover" />
+              <Image
+              src={slide.image}
+              alt={slide.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              priority
+              />
             </div>
           ))}
         </div>

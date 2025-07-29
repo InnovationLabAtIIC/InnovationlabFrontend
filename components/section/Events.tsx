@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import Button from '../ui/Button';
 import GridSectionDivider from '../ui/GridSectionDivider';
+import Image from 'next/image';
 
 export default function Events() {
 
@@ -10,21 +11,24 @@ export default function Events() {
             bg: 'bg-red-500',
             name: 'SUMMER ENRICHMENT',
             desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-            button: 'red'
+            button: 'red',
+            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80'
         },
         {
             id: 2,
             bg: 'bg-purple-500',
             name: 'IIC QUEST',
             desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-            button: 'purple'
+            button: 'purple',
+            image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80'
         },
         {
             id: 3,
             bg: 'bg-green-500',
             name: 'CREATIVE CLASH',
             desc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
-            button: 'green'
+            button: 'green',
+            image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80'
         },
     ];
 
@@ -51,22 +55,29 @@ export default function Events() {
                     <h2 className=" font-bold text-[8vw] md:text-[5vw]  text-white text-left my-6 md:my-12">EVENTS</h2>
                     <div className="w-full h-auto mt-3 md:mt-10 flex flex-col gap-16 md:gap-32">
                         {EVENTS.map((item) => (
-                            <div key={item.id} className="w-full md:h-96 h-auto relative ">
-                                <div className="w-full h-full relative flex flex-col md:flex-row z-10">
-                                    <div className="w-full md:w-96 h-64 md:h-96 bg-gray-800 relative flex-shrink-0">
-                                        <div className={`flex w-full h-full ${item.bg} translate-y-2 md:-translate-x-0 md:-translate-y-0 -translate-x-2 `}></div>
-                                        <div className="md:flex w-full h-full bg-gray-800 absolute top-0 md:translate-x-12 md:-translate-y-12"></div>
+                            <div
+                                key={item.id}
+                                className="relative overflow-hidden flex flex-col md:flex-row w-full h-auto pb-0 md:pb-0"
+                            >
+                                <div className=" w-full md:w-5/12 h-64 md:h-96 relative">
+                                    <div className={`${item.bg} h-52 md:h-86 absolute top-10 left-0 w-10/12 z-0`} />
+                                    <div className="w-full h-62 md:h-96 bg-white translate-x-4 -translate-y-4 relative z-10 flex items-center justify-center overflow-hidden">
+                                        <Image
+                                            alt=""
+                                            src={item.image}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            className="object-cover"
+                                        />
                                     </div>
-                                    <div className="w-full md:w-[calc(100%-24rem)] h-auto md:h-96 py-6 md:py-0 md:px-8 md:pl-24 flex flex-col justify-start">
-                                        <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 md:mb-4">{item.name}</h3>
-                                        <p className="text-base md:text-lg text-gray-200 mb-4 md:mb-6">
-                                            {item.desc}
-                                        </p>
-                                        <div>
-                                            <Button bg={item.button}>
-                                                EXPLORE
-                                            </Button>
-                                        </div>
+                                </div>
+                                <div className=" p-0 md:px-16 flex flex-col flex-1 mt-4 relative z-10">
+                                    <h3 className="text-xl md:text-3xl font-bold mb-2 text-white">{item.name}</h3>
+                                    <p className="text-base md:text-lg text-white mb-4">{item.desc}</p>
+                                    <div>
+                                        <Button bg={item.button}>
+                                            EXPLORE
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
