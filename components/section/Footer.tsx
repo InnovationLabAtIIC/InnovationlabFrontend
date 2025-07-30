@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import MarqueeText from "../ui/MarqueeText";
+import Link from "next/link";
 
 export default function Footer() {
 
@@ -28,11 +29,11 @@ export default function Footer() {
                 </div>
                 <div className="flex flex-col md:flex-row w-full justify-center items-center gap-4 mt-4">
                 <div className="flex gap-6 text-gray-300 text-sm md:text-base text-center items-center justify-center">
-                    <a href="#" className="hover:text-emerald-400 transition font-semibold">Home</a>
-                    <a href="#" className="hover:text-emerald-400 transition font-semibold">Events</a>
-                    <a href="#" className="hover:text-emerald-400 transition font-semibold">About</a>
-                    <a href="#" className="hover:text-emerald-400 transition font-semibold">Team</a>
-                    <a href="#" className="hover:text-emerald-400 transition font-semibold">Contact</a>
+                    <Link href="/" className="hover:text-emerald-400 transition font-semibold">Home</Link>
+                    <Link href="/events" className="hover:text-emerald-400 transition font-semibold">Events</Link>
+                    <Link href="/about" className="hover:text-emerald-400 transition font-semibold">About</Link>
+                    <Link href="/team" className="hover:text-emerald-400 transition font-semibold">Team</Link>
+                    <Link href="/contact" className="hover:text-emerald-400 transition font-semibold">Contact</Link>
                 </div>
                 </div>
             </div>
@@ -41,12 +42,12 @@ export default function Footer() {
             </div>
             </div>
             <MarqueeText className="w-full text-gray-900 text-4xl md:text-9xl font-bold" text="010000100101100101001101010000010100111001001010010001010101100101011001" />
-            <Image
+            {/* <Image
             alt=""
             fill
             className="object-cover grayscale opacity-20 w-full h-full absolute top-0 left-0 z-[0]"
             src="https://pictures.altai-travel.com/1920x0/mount-everest-aerial-view-himalayas-istock-3745.jpg"
-            />
+            /> */}
         </footer>
     );
 }
