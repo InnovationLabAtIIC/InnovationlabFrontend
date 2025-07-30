@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Jost } from "next/font/google";
 import "./globals.css";
 import HeroProvider from "../../providers/HeroProvider";
+import NavBar from "../../components/section/NavBar";
+import Footer from "../../components/section/Footer";
 
 const JOST = Jost({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] })
 
@@ -21,7 +23,9 @@ export default function RootLayout({
         className={` antialiased ${JOST.className}`}
       >
         <HeroProvider>
+          <NavBar/>
           {children}
+          <Footer/>
         </HeroProvider>
       </body>
 

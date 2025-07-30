@@ -10,14 +10,12 @@ import MarqueeText from "../../components/ui/MarqueeText";
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
-      <NavBar />
       <Hero />
       <AboutUs />
       <Events />
       <Updates />
       <Testimonials/>
       <FAQs />
-      <Footer/>
     </div>
   );
 }
