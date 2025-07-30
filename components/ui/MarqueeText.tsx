@@ -16,7 +16,7 @@ const MarqueeText: React.FC<MarqueeTextProps> = ({
     
     return (
         <div>
-            <Marquee loop={0}>
+            <Marquee className="overflow-hidden" loop={0}>
                 <p className={className}>{text}</p>
             </Marquee>
         </div>

@@ -50,7 +50,7 @@ export default function ContactPage() {
                                                 type={field.type}
                                                 name={field.name}
                                                 required
-                                                className="border border-green-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                                                className="border border-green-300   px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
                                                 placeholder={field.placeholder}
                                             />
                                         ) : (
@@ -58,7 +58,7 @@ export default function ContactPage() {
                                                 name={field.name}
                                                 required
                                                 rows={field.rows}
-                                                className="border border-green-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+                                                className="border border-green-300   px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
                                                 placeholder={field.placeholder}
                                             />
                                         )}
@@ -66,7 +66,7 @@ export default function ContactPage() {
                                 ))}
                                 <button
                                     type="submit"
-                                    className="mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition"
+                                    className="mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6   transition"
                                 >
                                     Send Message
                                 </button>
