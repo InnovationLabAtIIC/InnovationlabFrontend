@@ -2,16 +2,17 @@
 
 import { useState } from "react";
 import Button from "../ui/Button";
+import Link from "next/link";
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
 
     const navigation_links = [
-        { id: 1, name: "HOME", link: '' },
-        { id: 2, name: "EVENTS", link: '' },
-        { id: 3, name: "ABOUT", link: '' },
-        { id: 4, name: "TEAM", link: '' },
-        { id: 5, name: "CONTACT", link: '' },
+        { id: 1, name: "HOME", link: '/' },
+        { id: 2, name: "EVENTS", link: '/events' },
+        { id: 3, name: "ABOUT", link: '/about' },
+        { id: 4, name: "TEAM", link: '/team' },
+        { id: 5, name: "CONTACT", link: '/contact' },
     ];
 
     return (
@@ -31,13 +32,13 @@ export default function NavBar() {
                     {
                         navigation_links.map((item) => {
                             return (
-                                <a key={item.id} className="">{item.name}</a>
+                                <Link href={item.link || '#'} key={item.id} className="">{item.name}</Link>
                             )
                         })
                     }
                 </div>
                 <div className="hidden md:flex items-center justify-end">
-                    <Button>Start Here</Button>
+                    <Button bg="">Start Here</Button>
                 </div>
             </div>
             <div className={`md:hidden fixed top-0 left-0 w-full h-full bg-white z-50 transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}>
@@ -52,7 +53,7 @@ export default function NavBar() {
                             <a key={item.id} className=" text-xl md:text-3xl">{item.name}</a>
                         ))
                     }
-                    <Button>Start Here</Button>
+                    <Button bg="">Start Here</Button>
                 </div>
             </div>
         </div>

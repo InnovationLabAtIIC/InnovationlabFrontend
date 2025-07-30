@@ -1,9 +1,12 @@
 'use client';
 
+import MarqueeText from "../ui/MarqueeText";
+
 export default function Footer() {
 
     return (
-        <footer className="w-screen min-h-[50vh] flex flex-col items-start justify-end bg-gray-950 relative overflow-hidden pt-20 pb-8 mt-12 border-t-2 border-emerald-700">
+        <footer className="w-screen min-h-[50vh] flex flex-col items-start justify-end bg-gray-950 relative overflow-hidden pt-4 pb-8 mt-0">
+            <MarqueeText className="w-full text-gray-900 text-4xl md:text-9xl font-bold" text="010000100101100101001101010000010100111001001010010001010101100101011001" />
             <div className="w-full max-w-[1240px] mx-auto">
 
                 <div className="relative z-10 w-full max-w-[1240px] flex flex-col items-start gap-8 px-4">
@@ -36,6 +39,7 @@ export default function Footer() {
                     <span className="text-gray-500 text-xs md:text-sm">&copy; {new Date().getFullYear()} Innovation Labs. All rights reserved.</span>
                 </div>
             </div>
+            <MarqueeText className="w-full text-gray-900 text-4xl md:text-9xl font-bold" text="010000100101100101001101010000010100111001001010010001010101100101011001" />
         </footer>
     );
 }
