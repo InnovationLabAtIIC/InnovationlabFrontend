@@ -4,31 +4,31 @@ import NavBar from "../../components/section/NavBar";
 import Updates from "../../components/section/Updates";
 import FAQs from "../../components/section/FAQS";
 import Testimonials from "../../components/section/Testimonials";
+import Footer from "../../components/section/Footer";
+import MarqueeText from "../../components/ui/MarqueeText";
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
       <NavBar />
       <Hero />
-      <Missions />
+      <AboutUs />
       <Events />
       <Updates />
       <Testimonials/>
       <FAQs />
+      <Footer/>
     </div>
   );
 }
 
-
-
-
-function Missions() {
+function AboutUs() {
   return (
-    <div className="w-screen h-screen flex justify-center my-0  pb-16">
-      <div className="max-w-[1240px] w-full my-0 h-auto mt-0 flex flex-col md:px-0 px-4">
+    <section className="w-screen min-h-screen flex justify-center bg-white py-0 md:py-16 relative overflow-hidden">
+      <div className="absolute left-0 top-0 w-full h-full opacity-30 pointer-events-none z-0 hidden md:block">
       </div>
-    </div>
-  )
+    </section>
+  );
 }
 
 

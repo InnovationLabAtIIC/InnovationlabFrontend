@@ -49,6 +49,7 @@ const TESTIMONIALS = [
 
 export default function Testimonials() {
     const verticalOffsets = ["mt-0", "mt-12 md:mt-24", "mt-6 md:mt-12", "mt-16 md:mt-32"];
+    const verticalBottomOffsets = ["mb-6", "mb-0 md:mb-0", "mb-0 md:mb-12", "mb-0 md:mb-0"];
     const [emblaRef] = useEmblaCarousel({ loop: true });
 
     return (
@@ -72,13 +73,12 @@ export default function Testimonials() {
                                         className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[340px] border-l-8 ${t.borderColor} group`}
                                     >
                                         <div className={`absolute -top-10 left-6 w-20 h-20 ${t.avatarBg} flex items-center justify-center`}>
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-2 -translate-y-2 md:translate-x-4 md:-translate-y-4" />
                                         </div>
                                         <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
-                                            <h3 className="text-lg font-bold text-black mb-1">{t.name}</h3>
-                                            <span className="text-sm text-gray-500 mb-3">{t.title}</span>
-                                            <p className="text-md text-gray-700 mb-4">“{t.text}”</p>
+                                            <h3 className="text-xl font-bold text-black mb-1">{t.name}</h3>
+                                            <span className="text-sm text-black mb-3">{t.title}</span>
+                                            <p className="text-md font-medium text-black mb-4">“{t.text}”</p>
                                         </div>
                                     </MotionEffect>
                                 </div>
@@ -93,16 +93,15 @@ export default function Testimonials() {
                             fade
                             slide={{ direction: "up", offset: 60 }}
                             delay={idx * 0.1}
-                            className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[340px] border-l-8 lg:border-l-12 ${t.borderColor} ${verticalOffsets[idx % verticalOffsets.length]} group`}
+                            className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[450px] border-l-8 lg:border-l-12 ${t.borderColor} ${verticalOffsets[idx % verticalOffsets.length]} ${verticalBottomOffsets[idx % verticalBottomOffsets.length]} group`}
                         >
                             <div className={`absolute -top-10 md:-top-14 left-6 w-20 h-20 md:w-28 md:h-28 ${t.avatarBg} flex items-center justify-center`}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-4 -translate-y-4" />
                             </div>
                             <div className="mt-12 md:mt-0 flex flex-col items-start text-left px-6 md:px-8 py-6 md:py-8">
                                 <h3 className="text-lg md:text-2xl font-bold text-black mb-1">{t.name}</h3>
-                                <span className="text-sm md:text-base text-gray-500 mb-3">{t.title}</span>
-                                <p className="text-md md:text-lg text-gray-700 mb-4">“{t.text}”</p>
+                                <span className="text-sm md:text-base text-black mb-3">{t.title}</span>
+                                <p className="text-md md:text-lg text-black font-medium mb-4">“{t.text}”</p>
                             </div>
                         </MotionEffect>
                     ))}
