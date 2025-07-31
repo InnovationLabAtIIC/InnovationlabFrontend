@@ -92,10 +92,11 @@ function AboutContainerGrid({
                 <span className="text-md md:text-xl text-white mb-2">{description}</span>
             </div>
             <div className="w-full h-60 md:h-96 relative flex justify-center">
-                <div className={`bg-${bg}-500 h-[91.5%] md:h-[calc(100%-2.3rem)] absolute top-6 md:top-10 left-0 w-11/12 md:w-10/12 z-0`} />
+                <div className={`bg-${bg}-500 h-[91.5%] md:h-[calc(100%-2.5rem)] absolute top-6 md:top-10 left-0 w-11/12 md:w-10/12 z-0`} />
                 <Image
                     src={imageUrl}
                     alt={imageAlt}
+                    fill
                     className="w-[98%] h-full bg-slate-800 object-cover translate-x-2 -translate-y-2 md:translate-x-4 md:-translate-y-4 relative z-10"
                 />
             </div>
