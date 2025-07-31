@@ -50,7 +50,7 @@ export default function NavBar() {
                     </button>
                     {
                         navigation_links.map((item) => (
-                            <a key={item.id} className=" text-xl md:text-3xl">{item.name}</a>
+                            <Link href={item.link} key={item.id} onClick={() => setOpen(!open)} className=" text-xl md:text-3xl">{item.name}</Link>
                         ))
                     }
                     <Button bg="">Start Here</Button>

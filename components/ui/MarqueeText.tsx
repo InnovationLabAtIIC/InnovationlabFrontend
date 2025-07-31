@@ -13,13 +13,11 @@ const MarqueeText: React.FC<MarqueeTextProps> = ({
     speed = 100,
     className = "",
 }) => {
-    
+
     return (
-        <div>
-            <Marquee className="overflow-hidden" loop={0}>
-                <p className={className}>{text}</p>
-            </Marquee>
-        </div>
+        <Marquee className="overflow-hidden" loop={0}>
+            <p className={className}>{text}</p>
+        </Marquee>
     );
 };
 

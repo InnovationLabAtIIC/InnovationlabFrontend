@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { AnimatedText } from "../../../components/ui/AnimatedText";
 import GridSectionDivider from "../../../components/ui/GridSectionDivider";
+import FAQs from "../../../components/section/FAQS";
 
 const aboutSections = [
     {
@@ -27,7 +28,6 @@ const aboutSections = [
             "https://img.freepik.com/photos-gratuite/paysage-naturel-ciel-etoile-clair_23-2151683206.jpg?semt=ais_hybrid&w=740&q=80",
         bg: "blue",
     },
-    // Add more sections as needed
 ];
 
 export default function AboutPage() {
@@ -35,10 +35,10 @@ export default function AboutPage() {
         <div className="min-h-auto flex flex-col items-center bg-white pb-0">
             <div className="max-w-[1240px] mt-8 w-full h-auto flex flex-col md:flex-col md:items-start md:px-0 p-4 gap-12 relative z-10">
                 <div className="flex flex-col gap-2">
-                    <AnimatedText className=" text-4xl sm:text-5xl md:text-[8.2vw] font-bold" text="ABOUT" />
+                    <AnimatedText className="md:block text-5xl md:text-[8.2vw] font-bold" text="ABOUT" />
                 </div>
             </div>
-            <div className=" mt-6 md:mt-12 w-full bg-black flex items-center justify-center flex-col h-auto">
+            <div className=" mt-6 md:mt-12 w-full bg-black pb-12 flex items-center justify-center flex-col h-auto">
                 <GridSectionDivider colorMap={{ b: 'bg-white', g: 'bg-black' }} />
                 <div className=" mt-2 md:mt-8 w-full max-w-[1240px] h-auto flex flex-col md:flex-col md:items-start md:px-0 p-4 gap-12 relative z-10">
                     <h2 className=" font-bold text-[8vw] md:text-[5vw]  text-white text-left my-6 md:my-12">THE BEGINNING</h2>
@@ -56,8 +56,11 @@ export default function AboutPage() {
                     </div>
                     <h2 className=" font-bold text-[8vw] md:text-[5vw]  text-white text-left my-6 md:my-12">OUR MISSION</h2>
                     <AboutMissionGrid />
+                    <h2 className=" font-bold text-[8vw] md:text-[5vw]  text-white text-left my-6 md:my-12">OUR VISION</h2>
+                    <AboutVisionGrid />
                 </div>
             </div>
+            <FAQs />
             <GridSectionDivider colorMap={{ b: 'bg-black', g: 'bg-slate-950' }} />
         </div>
     );
@@ -136,42 +139,20 @@ const MISSIONS = [
 ];
 
 function AboutMissionGrid() {
-    const verticalOffsets = ["mt-0", "mt-12 md:mt-24", "mt-6 md:mt-12", "mt-16 md:mt-32"];
-    const verticalBottomOffsets = ["mb-6", "mb-0 md:mb-0", "mb-0 md:mb-12", "mb-0 md:mb-0"];
     return (
         <div className="w-full flex flex-col items-center overflow-visible">
-            <div className="block md:hidden mt-12 overflow-visible w-full">
-                <div className="flex pl-0 pr-2 overflow-visible overflow-x-auto">
-                    {MISSIONS.map((m, idx) => (
-                        <div
-                            key={m.title}
-                            className={`flex-[0_0_95%] max-w-[85vw] mr-4 ${idx === MISSIONS.length - 1 ? 'mr-0' : ''}`}
-                        >
-                            <div className={`relative flex flex-col items-stretch ${m.bgColor} p-0 pt-16 min-h-[340px] border-l-8 ${m.borderColor} group`}>
-                                <div className={`absolute -top-10 left-6 w-20 h-20 ${m.iconBg} flex items-center justify-center text-4xl`}>
-                                    <span>{m.icon}</span>
-                                </div>
-                                <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
-                                    <h3 className="text-xl font-bold text-white mb-1">{m.title}</h3>
-                                    <p className="text-md font-medium text-white mb-4">{m.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="hidden overflow-visible md:grid grid-cols-2 lg:grid-cols-4 gap-0 md:gap-4 lg:gap-0 mt-12 w-full">
-                {MISSIONS.map((m, idx) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 w-full">
+                {MISSIONS.map((m) => (
                     <div
                         key={m.title}
-                        className={`relative flex flex-col items-stretch ${m.bgColor} p-0 pt-16 min-h-[350px] border-l-8 lg:border-l-12 ${m.borderColor} ${verticalOffsets[idx % verticalOffsets.length]} ${verticalBottomOffsets[idx % verticalBottomOffsets.length]} group`}
+                        className={`relative flex flex-col items-stretch ${m.bgColor} p-0 pt-16 min-h-[340px] border-l-8 ${m.borderColor} group`}
                     >
-                        <div className={`absolute -top-10 md:-top-14 left-6 w-20 h-20 md:w-28 md:h-28 ${m.iconBg} flex items-center justify-center text-5xl md:text-6xl`}>
+                        <div className={`absolute -top-10 left-6 w-20 h-20 ${m.iconBg} flex items-center justify-center text-4xl`}>
                             <span>{m.icon}</span>
                         </div>
-                        <div className="mt-12 md:mt-0 flex flex-col items-start text-left px-6 md:px-8 py-6 md:py-8">
-                            <h3 className="text-lg md:text-2xl font-bold text-white mb-1">{m.title}</h3>
-                            <p className="text-md md:text-lg text-white font-medium mb-4">{m.description}</p>
+                        <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
+                            <h3 className="text-xl font-bold text-white mb-1">{m.title}</h3>
+                            <p className="text-md font-medium text-white mb-4">{m.description}</p>
                         </div>
                     </div>
                 ))}
@@ -179,3 +160,82 @@ function AboutMissionGrid() {
         </div>
     );
 }
+
+
+
+const VISIONS = [
+    {
+        title: "Inspire Curiosity",
+        description: "We envision a culture where curiosity drives exploration and sparks new discoveries every day.",
+        icon: "💡",
+        borderColor: "border-indigo-700",
+        bgColor: "bg-indigo-900",
+        iconBg: "bg-indigo-700",
+    },
+    {
+        title: "Embrace Diversity",
+        description: "We believe diverse perspectives fuel creativity and lead to more innovative solutions.",
+        icon: "🌍",
+        borderColor: "border-green-700",
+        bgColor: "bg-green-900",
+        iconBg: "bg-green-700",
+    },
+    {
+        title: "Lead with Integrity",
+        description: "We strive to set an example by acting with honesty, transparency, and respect in all we do.",
+        icon: "🛡️",
+        borderColor: "border-orange-700",
+        bgColor: "bg-orange-900",
+        iconBg: "bg-orange-700",
+    },
+    {
+        title: "Shape the Future",
+        description: "We aim to empower the next generation to create positive change and shape a better tomorrow.",
+        icon: "🔮",
+        borderColor: "border-fuchsia-700",
+        bgColor: "bg-fuchsia-900",
+        iconBg: "bg-fuchsia-700",
+    },
+];
+
+function AboutVisionGrid() {
+    return (
+        <div className="w-full flex flex-col items-center overflow-visible">
+            <div className="block md:hidden mt-12 overflow-visible w-full">
+                <div className="flex flex-col gap-8 px-2">
+                    {VISIONS.map((v, idx) => (
+                        <div
+                            key={v.title}
+                            className={`relative flex flex-col items-stretch ${v.bgColor} pt-16 min-h-[320px] border-t-8 ${v.borderColor} group`}
+                        >
+                            <div className={`absolute -top-10 left-6 w-20 h-20 ${v.iconBg} flex items-center justify-center text-4xl`}>
+                                <span>{v.icon}</span>
+                            </div>
+                            <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
+                                <h3 className="text-xl font-bold text-white mb-1">{v.title}</h3>
+                                <p className="text-md font-medium text-white mb-4">{v.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="hidden md:flex flex-row gap-6 mt-12 w-full">
+                {VISIONS.map((v, idx) => (
+                    <div
+                        key={v.title}
+                        className={`relative flex flex-col items-stretch ${v.bgColor} pt-16 min-h-[350px] border-t-8 ${v.borderColor} group flex-1`}
+                    >
+                        <div className={`absolute -top-10 left-6 w-20 h-20 ${v.iconBg} flex items-center justify-center text-5xl`}>
+                            <span>{v.icon}</span>
+                        </div>
+                        <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
+                            <h3 className="text-lg md:text-2xl font-bold text-white mb-1">{v.title}</h3>
+                            <p className="text-md md:text-lg text-white font-medium mb-4">{v.description}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+

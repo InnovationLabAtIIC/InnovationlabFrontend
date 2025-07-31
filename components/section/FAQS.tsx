@@ -35,7 +35,7 @@ export default function FAQs() {
   };
 
   return (
-    <div className="w-screen h-auto flex justify-center pb-16 my-0">
+    <div className="w-screen h-auto flex justify-center pb-24 my-0">
       <div className="max-w-[1240px] w-full h-auto mt-0 flex flex-col px-4 md:px-0 my-0">
         <h2 className="font-bold text-left text-black my-6 md:my-12 text-[8vw] md:text-[5vw]">
           FAQS
