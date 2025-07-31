@@ -1,6 +1,5 @@
 'use client'
 
-import { MotionEffect } from "../ui/AnimatedContainer";
 import useEmblaCarousel from 'embla-carousel-react';
 import React from 'react';
 
@@ -66,10 +65,7 @@ export default function Testimonials() {
                                     key={t.name}
                                     className={`flex-[0_0_90%] max-w-[85vw] mr-4 ${idx === TESTIMONIALS.length - 1 ? 'mr-0' : ''}`}
                                 >
-                                    <MotionEffect
-                                        fade
-                                        slide={{ direction: "up", offset: 60 }}
-                                        delay={idx * 0.1}
+                                    <div
                                         className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[340px] border-l-8 ${t.borderColor} group`}
                                     >
                                         <div className={`absolute -top-10 left-6 w-20 h-20 ${t.avatarBg} flex items-center justify-center`}>
@@ -80,7 +76,7 @@ export default function Testimonials() {
                                             <span className="text-sm text-black mb-3">{t.title}</span>
                                             <p className="text-md font-medium text-black mb-4">“{t.text}”</p>
                                         </div>
-                                    </MotionEffect>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -88,11 +84,8 @@ export default function Testimonials() {
                 </div>
                 <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-0 md:gap-4 lg:gap-0 mt-12">
                     {TESTIMONIALS.map((t, idx) => (
-                        <MotionEffect
+                        <div
                             key={t.name}
-                            fade
-                            slide={{ direction: "up", offset: 60 }}
-                            delay={idx * 0.1}
                             className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[450px] border-l-8 lg:border-l-12 ${t.borderColor} ${verticalOffsets[idx % verticalOffsets.length]} ${verticalBottomOffsets[idx % verticalBottomOffsets.length]} group`}
                         >
                             <div className={`absolute -top-10 md:-top-14 left-6 w-20 h-20 md:w-28 md:h-28 ${t.avatarBg} flex items-center justify-center`}>
@@ -103,7 +96,7 @@ export default function Testimonials() {
                                 <span className="text-sm md:text-base text-black mb-3">{t.title}</span>
                                 <p className="text-md md:text-lg text-black font-medium mb-4">“{t.text}”</p>
                             </div>
-                        </MotionEffect>
+                        </div>
                     ))}
                 </div>
             </div>
