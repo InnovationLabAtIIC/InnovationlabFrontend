@@ -1,11 +1,8 @@
 import Events from "../../components/section/Events";
 import Hero from "../../components/section/Hero";
-import NavBar from "../../components/section/NavBar";
 import Updates from "../../components/section/Updates";
 import FAQs from "../../components/section/FAQS";
 import Testimonials from "../../components/section/Testimonials";
-import Footer from "../../components/section/Footer";
-import MarqueeText from "../../components/ui/MarqueeText";
 
 export default function Home() {
   return (

@@ -10,7 +10,7 @@ export default function Hero() {
                     <div className="flex flex-col gap-2">
                         <AnimatedText className="hidden md:block text-5xl md:text-[8.2vw] font-bold" text="INNOVATION LABS" />
                         <AnimatedText className="block md:hidden text-5xl md:text-[8.2vw] font-bold" text="INNOVATIONLABS" />
-                        <p className=" text-md md:text-xl max-w-[600px]">There are many variations of passages of Lorem Ipsum available, but the  majority have suffered alteration in some form, by injected humour, or  randomised words which don't look even slightly believable.</p>
+                        <p className=" text-md md:text-xl max-w-[600px]">{`There are many variations of passages of Lorem Ipsum available, but the  majority have suffered alteration in some form, by injected humour, or  randomised words which don't look even slightly believable.`}</p>
                     </div>
                     <div className="flex flex-row gap-4 mt-4">
                         <Button bg="">GET STARTED</Button>

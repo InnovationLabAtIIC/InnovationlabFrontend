@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import MarqueeText from "../ui/MarqueeText";
 import Link from "next/link";
 

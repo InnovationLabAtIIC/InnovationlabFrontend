@@ -1,6 +1,4 @@
-import { motion } from 'framer-motion'
 import Button from '../ui/Button';
-import GridSectionDivider from '../ui/GridSectionDivider';
 import Image from 'next/image';
 
 export default function Events() {

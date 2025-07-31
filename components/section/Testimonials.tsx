@@ -1,6 +1,7 @@
 'use client'
 
 import useEmblaCarousel from 'embla-carousel-react';
+import Image from 'next/image';
 import React from 'react';
 
 const TESTIMONIALS = [
@@ -69,7 +70,7 @@ export default function Testimonials() {
                                         className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[340px] border-l-8 ${t.borderColor} group`}
                                     >
                                         <div className={`absolute -top-10 left-6 w-20 h-20 ${t.avatarBg} flex items-center justify-center`}>
-                                            <img src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-2 -translate-y-2 md:translate-x-4 md:-translate-y-4" />
+                                            <Image src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-2 -translate-y-2 md:translate-x-4 md:-translate-y-4" />
                                         </div>
                                         <div className="mt-12 flex flex-col items-start text-left px-6 py-6">
                                             <h3 className="text-xl font-bold text-black mb-1">{t.name}</h3>
@@ -89,7 +90,7 @@ export default function Testimonials() {
                             className={`relative flex flex-col items-stretch ${t.bgColor} p-0 pt-16 min-h-[450px] border-l-8 lg:border-l-12 ${t.borderColor} ${verticalOffsets[idx % verticalOffsets.length]} ${verticalBottomOffsets[idx % verticalBottomOffsets.length]} group`}
                         >
                             <div className={`absolute -top-10 md:-top-14 left-6 w-20 h-20 md:w-28 md:h-28 ${t.avatarBg} flex items-center justify-center`}>
-                                <img src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-4 -translate-y-4" />
+                                <Image src={t.image} alt={t.name} className="w-full h-full object-cover translate-x-4 -translate-y-4" />
                             </div>
                             <div className="mt-12 md:mt-0 flex flex-col items-start text-left px-6 md:px-8 py-6 md:py-8">
                                 <h3 className="text-lg md:text-2xl font-bold text-black mb-1">{t.name}</h3>

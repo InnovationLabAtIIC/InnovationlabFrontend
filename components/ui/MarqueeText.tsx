@@ -10,7 +10,6 @@ interface MarqueeTextProps {
 
 const MarqueeText: React.FC<MarqueeTextProps> = ({
     text,
-    speed = 100,
     className = "",
 }) => {
 
