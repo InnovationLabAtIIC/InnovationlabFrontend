@@ -51,7 +51,7 @@ export default function FAQs() {
                 onClick={() => handleToggle(idx)}
               >
                 <div className="flex justify-between items-center ">
-                  <h3 className=" text-xl md:text-3xl text-left text-black font-bold">{item.title}</h3>
+                  <h3 className=" text-xl md:text-3xl text-left text-black font-medium">{item.title}</h3>
                   <motion.span
                     animate={{ rotate: openIndex === idx ? 90 : 0 }}
                     transition={{ duration: 0.2 }}
