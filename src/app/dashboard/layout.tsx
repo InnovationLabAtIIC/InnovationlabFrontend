@@ -1,98 +1,91 @@
-import { SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarHeader,
-} from "@/components/ui/sidebar"
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarProvider,
+    SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { getSessionUser } from "@/lib/auth/service";
 import { ThemeProvider } from "@/providers/theme-provider";
 
-import { Calendar, Home, Inbox, Settings, UsersIcon } from "lucide-react"
+import { Calendar, Home, Inbox, Settings, UsersIcon } from "lucide-react";
 
-import "../globals.css"
+import "../globals.css";
 
+export default async function DashboardLayout({
+    children,
+}: Readonly<{ children: React.ReactNode }>) {
+    const cookieStore = await cookies();
+    const session = await getSessionUser(cookieStore);
 
-export default function DashboardLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
+    if (!session) {
+        redirect("/login");
+    }
+
     return (
-        <SidebarProvider>
-            <AppSidebar />
-            <main>
-                <SidebarTrigger />
-                {children}
-            </main>
-        </SidebarProvider>
+        <html suppressHydrationWarning>
+            <body>
+                <SidebarProvider>
+                    <AppSidebar />
+                    <main>
+                        <SidebarTrigger />
+                        {children}
+                    </main>
+                </SidebarProvider>
+            </body>
+        </html>
     );
 }
 
-
 export function AppSidebar() {
     const items = [
-        {
-            title: "Home",
-            url: "#",
-            icon: Home,
-        },
-        {
-            title: "News",
-            url: "#",
-            icon: Inbox,
-        },
-        {
-            title: "Events",
-            url: "#",
-            icon: Calendar,
-        },
-        {
-            title: "About",
-            url: "#",
-            icon: UsersIcon,
-        },
-        {
-            title: "Testimonials",
-            url: "#",
-            icon: UsersIcon,
-        },
-        {
-            title: "Users",
-            url: "#",
-            icon: UsersIcon,
-        },
-        {
-            title: "Settings",
-            url: "#",
-            icon: Settings,
-        },
-    ]
+        { title: "Home", url: "#", icon: Home },
+        { title: "News", url: "#", icon: Inbox },
+        { title: "Events", url: "#", icon: Calendar },
+        { title: "About", url: "#", icon: UsersIcon },
+        { title: "Testimonials", url: "#", icon: UsersIcon },
+        { title: "Users", url: "#", icon: UsersIcon },
+        { title: "Settings", url: "#", icon: Settings },
+    ];
 
     return (
-
-        <html lang="en" suppressHydrationWarning>
-            <body className={` antialiased`}>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                    <Sidebar>
-                        <SidebarContent>
-                            <SidebarGroup>
-                                <SidebarGroupLabel>MENU</SidebarGroupLabel>
-                                <SidebarGroupContent>
-                                    <SidebarMenu>
-                                        {items.map((item) => (
-                                            <SidebarMenuItem key={item.title}>
-                                                <SidebarMenuButton asChild>
-                                                    <a href={item.url}>
-                                                        <item.icon />
-                                                        <span>{item.title}</span>
-                                                    </a>
-                                                </SidebarMenuButton>
-                                            </SidebarMenuItem>
-                                        ))}
-                                    </SidebarMenu>
-                                </SidebarGroupContent>
-                            </SidebarGroup>
-                        </SidebarContent>
-                    </Sidebar>
-                </ThemeProvider>
-            </body>
-        </html>
-    )
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <Sidebar>
+                <SidebarContent>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>MENU</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {items.map((item) => (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </SidebarContent>
+                <SidebarFooter />
+            </Sidebar>
+        </ThemeProvider>
+    );
 }
