@@ -10,91 +10,90 @@ import {
   Trophy,
   Users,
   Zap,
+  ArrowRight,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function AboutPage() {
   const missionPanels = [
     {
-  title: "Mission",
-  subtitle: "Empower innovators with chiya-powered chaos",
+      title: "Mission",
+      subtitle: "Empower Innovators",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sodales risus a mi pulvinar, ut varius lorem luctus.",
+        "We provide students with the resources, mentorship, and collaborative environment needed to transform bold ideas into impactful solutions that address real-world challenges.",
       icon: Target,
-      accent: "from-primary/10 via-background to-background",
     },
     {
-  title: "Vision",
-  subtitle: "Lead the next lol-wave of impact",
+      title: "Vision",
+      subtitle: "Lead Innovation",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sodales risus a mi pulvinar, ut varius lorem luctus.",
+        "To become a leading innovation hub that bridges academia and industry, fostering a culture of creativity, experimentation, and technological advancement.",
       icon: Lightbulb,
-      accent: "from-background via-primary/10 to-background",
     },
     {
-  title: "Approach",
-  subtitle: "Learning-by-building, hacking-by-laughing",
+      title: "Approach",
+      subtitle: "Learning by Building",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sodales risus a mi pulvinar, ut varius lorem luctus.",
+        "Hands-on project-based learning combined with industry mentorship, enabling students to gain practical experience while developing innovative solutions.",
       icon: Layers,
-      accent: "from-primary/5 via-background to-background",
     },
     {
-  title: "Community",
-  subtitle: "Inclusive by design, mazza by default",
+      title: "Community",
+      subtitle: "Inclusive by Design",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sodales risus a mi pulvinar, ut varius lorem luctus.",
+        "A diverse and welcoming community where every voice is heard, collaboration is celebrated, and innovation thrives through collective effort.",
       icon: Users,
-      accent: "from-background via-primary/5 to-background",
     },
   ];
 
   const values = [
     {
-      title: "Passion (chiya-fueled)",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum purus in ipsum pretium aliquet.",
+      title: "Passion",
+      description: "Driven by curiosity and enthusiasm to explore new technologies and push the boundaries of what's possible.",
       icon: Heart,
     },
     {
-      title: "Collaboration antics",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum purus in ipsum pretium aliquet.",
+      title: "Collaboration",
+      description: "Working together across disciplines to create solutions that are greater than the sum of their parts.",
       icon: Users,
     },
     {
-      title: "Innovation jukebox",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum purus in ipsum pretium aliquet.",
+      title: "Innovation",
+      description: "Constantly seeking new approaches, embracing failure as learning, and iterating toward breakthrough solutions.",
       icon: Zap,
     },
     {
-      title: "Impact ko josh",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum purus in ipsum pretium aliquet.",
+      title: "Impact",
+      description: "Creating meaningful change that extends beyond the lab, benefiting communities and society at large.",
       icon: Globe,
     },
   ];
 
   const milestones = [
     {
-  year: "2015",
-  title: "Foundation: chai-driven beginnings",
+      year: "2015",
+      title: "Foundation",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer suscipit mauris nec odio posuere malesuada.",
+        "Innovation Lab was established at Itahari International College with a vision to create a collaborative space for student innovation and research.",
     },
     {
-  year: "2018",
-  title: "First breakthrough: whiteboard ma wow",
+      year: "2018",
+      title: "First Breakthrough",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer suscipit mauris nec odio posuere malesuada.",
+        "Successfully launched our first major project, gaining recognition from industry partners and establishing our reputation for excellence.",
     },
     {
-  year: "2021",
-  title: "Expansion: global ghumti",
+      year: "2021",
+      title: "Expansion",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer suscipit mauris nec odio posuere malesuada.",
+        "Expanded our programs and partnerships, reaching international collaborators and broadening our impact across multiple domains.",
     },
     {
-  year: "2024",
-  title: "Recognition: sabai le notice gare",
+      year: "2024",
+      title: "Recognition",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer suscipit mauris nec odio posuere malesuada.",
+        "Received multiple awards for innovation and community impact, solidifying our position as a leading student innovation hub.",
     },
   ];
 
@@ -106,86 +105,95 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="w-full bg-background text-foreground">
-      <section className="relative isolate overflow-hidden py-24">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/12%,transparent_55%),radial-gradient(circle_at_80%_0%,theme(colors.primary)/8%,transparent_45%)]" />
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-[1.3fr_1fr] lg:gap-24 items-center">
-            <div>
-              <p className="uppercase tracking-[0.35em] text-sm text-foreground/50">Innovation Lab</p>
-              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
-                Hamro lab future design garcha, chiya khoi? bhane pani ready.
-              </h1>
-              <p className="mt-8 text-lg leading-relaxed text-foreground/75 max-w-2xl">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae felis sed justo convallis posuere in
-                et urna. Phasellus fermentum, nibh nec congue maximus, elit enim iaculis sapien, vitae aliquet enim
-                justo vitae erat.
-              </p>
-              <div className="mt-12 grid gap-4 sm:grid-cols-3">
-                {["Strategy Studio", "Prototype Sprint", "Launch Pad"].map((label) => (
-                  <div
-                    key={label}
-                    className="rounded-2xl border border-foreground/15 px-5 py-4 text-sm font-medium uppercase tracking-wide text-foreground/60"
-                  >
-                    {label}
-                  </div>
-                ))}
+    <main className="w-full bg-background text-foreground">;
+      <section className="relative min-h-[80vh] flex items-center border-b border-foreground/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+          <div className="grid gap-20 lg:grid-cols-2 lg:gap-24 items-center">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                About Us
               </div>
-            </div>
-            <div className="grid gap-6">
-              <div className="rounded-3xl border border-foreground/15 bg-gradient-to-br from-primary/10 via-background to-background p-8 backdrop-blur">
-                <p className="text-sm uppercase tracking-wide text-foreground/60">Why it matters</p>
-                <p className="mt-4 text-xl font-semibold leading-relaxed text-foreground/90">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis volutpat tortor quis lectus viverra,
-                  nec vehicula purus commodo.
+              
+              <div className="space-y-6">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+                  SHAPING THE
+                  <br />
+                  <span className="text-foreground/60">FUTURE</span>
+                </h1>
+                <p className="text-xl leading-relaxed text-foreground/70 max-w-xl">
+                  At Innovation Lab, we transform bold ideas into real-world solutions through technology, creativity, and collaborative innovation.
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[{ value: "87%", label: "ideas shipped" }, { value: "42", label: "industry allies" }].map(
-                  (item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-2xl border border-foreground/15 bg-background/60 p-6 text-center backdrop-blur"
-                    >
-                      <span className="block text-3xl font-semibold">{item.value}</span>
-                      <span className="mt-1 block text-xs uppercase tracking-wider text-foreground/50">
-                        {item.label}
-                      </span>
-                    </div>
-                  )
-                )}
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4">
+                <Button size="lg" className="px-8 text-sm uppercase tracking-wider" asChild>
+                  <Link href="/events">
+                    Join Us
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="px-8 text-sm uppercase tracking-wider"
+                  asChild
+                >
+                  <Link href="/#">View Projects</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                  <h3 className="text-3xl font-bold mb-2">87%</h3>
+                  <p className="text-sm uppercase tracking-wider text-foreground/60">Ideas Shipped</p>
+                </div>
+                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                  <h3 className="text-3xl font-bold mb-2">110</h3>
+                  <p className="text-sm uppercase tracking-wider text-foreground/60">Mentors</p>
+                </div>
+              </div>
+              <div className="space-y-4 pt-12">
+                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                  <h3 className="text-3xl font-bold mb-2">42</h3>
+                  <p className="text-sm uppercase tracking-wider text-foreground/60">Industry Allies</p>
+                </div>
+                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                  <h3 className="text-3xl font-bold mb-2">72</h3>
+                  <p className="text-sm uppercase tracking-wider text-foreground/60">Global Pilots</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Mission, vision, ra hamro kaam garne swag</h2>
-            <p className="max-w-xl text-base leading-relaxed text-foreground/70">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin molestie tortor non malesuada laoreet.
-            </p>
+      <section className="py-32 border-b border-foreground/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="space-y-4 mb-16">
+            <p className="text-xs uppercase tracking-widest text-foreground/50">Our Foundation</p>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Mission, Vision & Approach</h2>
           </div>
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {missionPanels.map((panel) => {
               const Icon = panel.icon;
               return (
                 <div
                   key={panel.title}
-                  className={`group relative overflow-hidden rounded-3xl border border-foreground/12 bg-gradient-to-br ${panel.accent} p-8`}
+                  className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors"
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="rounded-full border border-foreground/20 p-3">
-                      <Icon className="h-5 w-5" />
-                    </span>
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 border border-foreground/20 flex items-center justify-center flex-shrink-0">
+                      <Icon className="h-6 w-6" />
+                    </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">{panel.title}</p>
-                      <h3 className="mt-3 text-xl font-semibold text-foreground/90">{panel.subtitle}</h3>
+                      <p className="text-xs uppercase tracking-widest text-foreground/50">{panel.title}</p>
+                      <h3 className="mt-2 text-2xl font-semibold text-foreground/90">{panel.subtitle}</h3>
                     </div>
                   </div>
-                  <p className="mt-6 text-sm leading-relaxed text-foreground/70">{panel.description}</p>
+                  <p className="text-sm leading-relaxed text-foreground/70">{panel.description}</p>
                 </div>
               );
             })}
@@ -193,27 +201,34 @@ export default function AboutPage() {
         </div>
       </section>
 
-  <section className="py-24 bg-gradient-to-b from-background via-primary/10 to-background">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Values that keep hamro studio lit</h2>
-              <p className="mt-6 text-base leading-relaxed text-foreground/70 max-w-xl">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida ligula eu blandit venenatis.
+      <section className="py-32 border-b border-foreground/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-widest text-foreground/50">Our Values</p>
+                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                  What Drives Us Forward
+                </h2>
+              </div>
+              <p className="text-lg leading-relaxed text-foreground/70">
+                Our core values shape every project, collaboration, and innovation that emerges from the lab. They guide our approach to problem-solving and community building.
               </p>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-6">
               {values.map((value) => {
                 const Icon = value.icon;
                 return (
                   <div
                     key={value.title}
-                    className="flex flex-col gap-4 rounded-3xl border border-foreground/12 bg-background/80 p-8 backdrop-blur"
+                    className="border-l-2 border-foreground/20 pl-6 py-2"
                   >
-                    <Icon className="h-6 w-6 text-primary" />
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground/90">{value.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-foreground/65">{value.description}</p>
+                    <div className="flex items-start gap-4">
+                      <Icon className="h-6 w-6 mt-1 flex-shrink-0" />
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
+                        <p className="text-foreground/70 leading-relaxed">{value.description}</p>
+                      </div>
                     </div>
                   </div>
                 );
@@ -223,33 +238,37 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      <section className="py-32 border-b border-foreground/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr]">
-            <div className="rounded-3xl border border-foreground/12 bg-background/70 p-10 backdrop-blur">
-              <h2 className="text-3xl font-semibold tracking-tight">Hamro journey so far: dari, hoodie, chiya</h2>
-              <p className="mt-6 text-base leading-relaxed text-foreground/70">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sodales purus id quam bibendum, sit amet
-                commodo velit suscipit.
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-widest text-foreground/50">Our Journey</p>
+                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                  Evolution of Excellence
+                </h2>
+              </div>
+              <p className="text-lg leading-relaxed text-foreground/70">
+                From our founding to today, we've grown into a thriving innovation ecosystem that continues to push boundaries and create impact.
               </p>
-              <div className="mt-10 grid grid-cols-2 gap-4 text-sm">
-                <div className="rounded-2xl border border-foreground/12 p-6">
-                  <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Global pilots</p>
-                  <p className="mt-3 text-2xl font-semibold">72</p>
+              <div className="grid grid-cols-2 gap-4 pt-8">
+                <div className="border border-foreground/10 p-6">
+                  <p className="text-xs uppercase tracking-widest text-foreground/50">Global Pilots</p>
+                  <p className="mt-3 text-3xl font-bold">72</p>
                 </div>
-                <div className="rounded-2xl border border-foreground/12 p-6">
-                  <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Mentors onboard</p>
-                  <p className="mt-3 text-2xl font-semibold">110</p>
+                <div className="border border-foreground/10 p-6">
+                  <p className="text-xs uppercase tracking-widest text-foreground/50">Mentors</p>
+                  <p className="mt-3 text-3xl font-bold">110</p>
                 </div>
               </div>
             </div>
             <div className="relative pl-8">
-              <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-primary/60 via-primary/20 to-transparent" />
+              <div className="absolute left-0 top-0 h-full w-px bg-foreground/20" />
               <div className="space-y-12">
                 {milestones.map((item) => (
                   <div key={item.year} className="relative pl-6">
-                    <span className="absolute left-0 top-2 h-4 w-4 rounded-full border border-primary/40 bg-primary/20" />
-                    <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">{item.year}</p>
+                    <span className="absolute left-0 top-2 h-3 w-3 border-2 border-foreground/40 bg-background" />
+                    <p className="text-xs uppercase tracking-widest text-foreground/50">{item.year}</p>
                     <h3 className="mt-3 text-xl font-semibold text-foreground/90">{item.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-foreground/70">{item.description}</p>
                   </div>
@@ -260,22 +279,25 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-tr from-primary/5 via-background to-background">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-center">
-            Momentum we build with partners (ra snacks)
-          </h2>
-          <div className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-4">
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center space-y-4 mb-16">
+            <p className="text-xs uppercase tracking-widest text-foreground/50">Our Impact</p>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              Building Momentum Together
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
             {achievements.map((stat) => {
               const Icon = stat.icon;
               return (
                 <div
                   key={stat.label}
-                  className="flex flex-col items-center gap-3 rounded-3xl border border-foreground/12 bg-background/85 p-8 backdrop-blur"
+                  className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors text-center"
                 >
-                  <Icon className="h-6 w-6 text-primary" />
-                  <span className="text-3xl font-semibold">{stat.value}</span>
-                  <span className="text-xs uppercase tracking-[0.35em] text-foreground/55 text-center">
+                  <Icon className="h-6 w-6 mx-auto mb-4" />
+                  <span className="block text-3xl font-bold mb-2">{stat.value}</span>
+                  <span className="text-xs uppercase tracking-widest text-foreground/60">
                     {stat.label}
                   </span>
                 </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 
 interface FooterMenuItem {
   title: string;
@@ -14,94 +15,111 @@ interface FooterProps {
 
 const menuDefaults: FooterMenuItem[] = [
   {
-    title: "Studio",
+    title: "About",
     links: [
-      { text: "About", url: "/(frontend)/about" },
-      { text: "Residency", url: "#" },
-      { text: "Partners", url: "#" },
-      { text: "Careers", url: "#" },
-    ],
-  },
-  {
-    title: "Programmes",
-    links: [
-      { text: "Strategy Sprints", url: "#" },
-      { text: "Prototype Studio", url: "#" },
-      { text: "Community Lab", url: "#" },
-      { text: "Learning Hub", url: "#" },
+      { text: "Our Story", url: "/about" },
+      { text: "Team", url: "/about#team" },
+      { text: "Partners", url: "/about#partners" },
+      { text: "Careers", url: "/about#careers" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { text: "Journal", url: "#news" },
-      { text: "Playbooks", url: "#" },
-      { text: "Events", url: "#events" },
-      { text: "Press", url: "#" },
+      { text: "News & Updates", url: "/news" },
+      { text: "Events", url: "/events" },
+      { text: "Documentation", url: "#" },
+      { text: "Blog", url: "#" },
     ],
   },
   {
     title: "Connect",
     links: [
-      { text: "hello@innovationlab.com", url: "mailto:hello@innovationlab.com" },
-      { text: "LinkedIn", url: "#" },
-      { text: "Instagram", url: "#" },
-      { text: "YouTube", url: "#" },
+      { text: "Contact Us", url: "#contact" },
+      { text: "Join Community", url: "#" },
+      { text: "Support", url: "#" },
+      { text: "FAQs", url: "#" },
     ],
   },
 ];
 
 const bottomDefaults = [
-  { text: "Privacy", url: "#" },
-  { text: "Terms", url: "#" },
+  { text: "Privacy Policy", url: "#" },
+  { text: "Terms of Service", url: "#" },
   { text: "Cookie Policy", url: "#" },
 ];
 
 export function Footer({
-  tagline = "Innovation Lab",
+  tagline = "Empowering Innovation",
   menuItems = menuDefaults,
   bottomLinks = bottomDefaults,
-  copyright = "© 2025 Innovation Lab. All rights reserved.",
+  copyright = "© 2025 Innovation Lab, Itahari International College. All rights reserved.",
 }: FooterProps) {
   return (
-    <footer className="relative overflow-hidden border-t border-foreground/10 bg-gradient-to-b from-background via-primary/10 to-background py-20">
-      <div className="absolute inset-x-0 -top-32 mx-auto h-64 w-[70%] rounded-full bg-primary/10 blur-[120px]" />
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
+    <footer className="border-t border-foreground/10 bg-background">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="py-16 grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          {/* Brand Section */}
           <div className="space-y-6">
             <Link
               href="/"
-              className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-foreground/60"
+              className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-foreground"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/15 text-sm font-semibold">
+              <span className="flex h-12 w-12 items-center justify-center border border-foreground/20 text-xs font-bold">
                 IL
               </span>
-              Innovation Lab
+              INNOVATION LAB
             </Link>
-            <p className="text-sm leading-relaxed text-foreground/65">
-              We partner with teams to prototype inclusive futures. Programmes, residencies, and playbooks crafted to
-              turn intention into impact.
+            <p className="text-sm leading-relaxed text-foreground/70 max-w-sm">
+              Transforming bold ideas into real-world solutions through technology, creativity, and collaborative innovation at Itahari International College.
             </p>
-            <div className="flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.4em] text-foreground/50">
-              {["Strategy", "Prototyping", "Residency", "Learning"].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-foreground/15 px-4 py-2"
-                >
-                  {tag}
-                </span>
-              ))}
+            
+            {/* Social Links */}
+            <div className="flex items-center gap-3 pt-4">
+              <a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center border border-foreground/20 hover:border-foreground/40 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
+              <a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center border border-foreground/20 hover:border-foreground/40 transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="h-4 w-4" />
+              </a>
+              <a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center border border-foreground/20 hover:border-foreground/40 transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="h-4 w-4" />
+              </a>
+              <a
+                href="mailto:hello@innovationlab.com"
+                className="flex h-10 w-10 items-center justify-center border border-foreground/20 hover:border-foreground/40 transition-colors"
+                aria-label="Email"
+              >
+                <Mail className="h-4 w-4" />
+              </a>
             </div>
           </div>
+
+          {/* Menu Sections */}
           {menuItems.map((section) => (
             <div key={section.title} className="space-y-5">
-              <h3 className="text-xs uppercase tracking-[0.35em] text-foreground/55">{section.title}</h3>
-              <ul className="space-y-3 text-sm text-foreground/60">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/90">
+                {section.title}
+              </h3>
+              <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.text}>
                     <Link
                       href={link.url}
-                      className="transition-colors hover:text-foreground/90"
+                      className="text-sm text-foreground/70 transition-colors hover:text-foreground"
                     >
                       {link.text}
                     </Link>
@@ -111,16 +129,21 @@ export function Footer({
             </div>
           ))}
         </div>
-        <div className="mt-16 flex flex-col gap-4 border-t border-foreground/10 pt-6 text-xs uppercase tracking-[0.3em] text-foreground/50 md:flex-row md:items-center md:justify-between">
-          <p>{tagline}</p>
-          <div className="flex flex-wrap gap-4 text-[11px]">
+
+        {/* Bottom Bar */}
+        <div className="border-t border-foreground/10 py-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <p className="text-xs text-foreground/60">{copyright}</p>
+          <div className="flex flex-wrap gap-6">
             {bottomLinks.map((link) => (
-              <Link key={link.text} href={link.url} className="hover:text-foreground/80">
+              <Link
+                key={link.text}
+                href={link.url}
+                className="text-xs text-foreground/60 hover:text-foreground transition-colors"
+              >
                 {link.text}
               </Link>
             ))}
           </div>
-          <p className="text-[11px]">{copyright}</p>
         </div>
       </div>
     </footer>

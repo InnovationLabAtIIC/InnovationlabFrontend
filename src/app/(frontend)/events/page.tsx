@@ -199,34 +199,39 @@ export default async function EventsPage() {
 
   return (
     <main className="w-full bg-background text-foreground">
-      <section className="relative isolate overflow-hidden py-20 sm:py-24">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/18%,transparent_60%),radial-gradient(circle_at_80%_10%,theme(colors.primary)/10%,transparent_45%)]" />
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="space-y-8 sm:space-y-10">
-              <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.35em] text-foreground/60">
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Gatherings</span>
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Workshops</span>
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Summits</span>
+      <section className="relative py-10">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+            <div className="flex flex-col justify-center space-y-8">
+              <div className="inline-flex w-fit border border-foreground/20 px-4 py-2">
+                <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                  Events & Gatherings
+                </p>
               </div>
-              <h1 className="text-pretty text-3xl sm:text-4xl lg:text-6xl font-semibold tracking-tight">
-                Events jaha bold thinkers ra buff momo ekai table ma bascha.
+              
+              <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+                Where Bold Thinkers Connect
               </h1>
-              <p className="text-pretty text-base sm:text-lg leading-relaxed text-foreground/80 max-w-2xl">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vitae lacus porttitor, accumsan
-                arcu id, aliquam augue.
+              
+              <p className="text-lg leading-relaxed text-foreground/70 max-w-xl">
+                Join us for workshops, summits, and networking events where innovation meets collaboration. 
+                Connect with industry leaders and emerging talents shaping the future.
               </p>
-              <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
+
+              <div className="flex flex-wrap gap-3">
                 {["Strategy", "Prototyping", "Community", "Learning"].map((tag) => (
-                  <span key={tag} className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">
+                  <span 
+                    key={tag} 
+                    className="border border-foreground/20 px-4 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60 hover:border-foreground/40 hover:text-foreground/80 transition-colors"
+                  >
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
 
-            <article className="rounded-3xl border border-foreground/12 bg-background/85 backdrop-blur">
-              <div className="relative h-56 sm:h-64 w-full overflow-hidden rounded-t-3xl">
+            <article className="border border-foreground/20 bg-background">
+              <div className="relative h-80 w-full overflow-hidden">
                 {spotlightImage ? (
                   <Image
                     src={spotlightImage}
@@ -237,62 +242,56 @@ export default async function EventsPage() {
                     priority
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,theme(colors.primary)/30%,transparent_70%)]" />
+                  <div className="absolute inset-0 bg-foreground/5" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/20 to-background/60" />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 text-foreground">
-                  <span className="text-xs uppercase tracking-[0.35em] text-foreground/70">Featured</span>
-                  <p className="mt-2 text-lg font-semibold text-foreground/90 sm:text-xl">{spotlightSchedule.date}</p>
-                  <p className="text-sm text-foreground/65">{spotlightSchedule.time}</p>
+                <div className="absolute top-6 left-6">
+                  <div className="border border-foreground/20 bg-background/95 px-4 py-2">
+                    <span className="text-xs font-medium uppercase tracking-wider text-foreground/60">Featured Event</span>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-6 p-6 sm:p-10">
-                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
+              
+              <div className="border-t border-foreground/20 p-8 space-y-6">
+                <div className="flex flex-wrap gap-3">
+                  <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
                     <CalendarDays className="h-3.5 w-3.5" />
                     {spotlightSchedule.date}
                   </span>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
+                  <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
                     <Clock className="h-3.5 w-3.5" />
                     {spotlightSchedule.time}
                   </span>
-                </div>
-                <h2 className="text-pretty text-2xl sm:text-3xl font-semibold text-foreground/90">{spotlight.title}</h2>
-                <p className="text-pretty text-base leading-relaxed text-foreground/75">
-                  {getEventSummary(spotlight)}
-                </p>
-                {/* {spotlightTags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.25em] text-foreground/60">
-                    {spotlightTags.map((item) => (
-                      <span key={item} className="rounded-full border border-foreground/15 px-3 py-1">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                )} */}
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-foreground/10 pt-6 text-xs uppercase tracking-[0.3em] text-foreground/65">
-                  <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
                     <MapPin className="h-3.5 w-3.5" />
                     {getLocationLabel(spotlight)}
                   </span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {spotlight.registrationUrl && (
-                      <Link
-                        href={spotlight.registrationUrl}
-                        className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/70 transition-colors hover:text-foreground/90"
-                      >
-                        Register
-                        <ArrowUpRight className="h-4 w-4" />
-                      </Link>
-                    )}
+                </div>
+                
+                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  {spotlight.title}
+                </h2>
+                
+                <p className="text-base leading-relaxed text-foreground/70">
+                  {getEventSummary(spotlight)}
+                </p>
+                
+                <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-foreground/10">
+                  {spotlight.registrationUrl && (
                     <Link
-                      href={`/events/${spotlight.slug}`}
-                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/70 transition-colors hover:text-foreground/90"
+                      href={spotlight.registrationUrl}
+                      className="inline-flex items-center gap-2 border border-foreground/30 px-6 py-3 text-xs font-medium uppercase tracking-wider text-foreground hover:bg-foreground hover:text-background transition-colors"
                     >
-                      Event details
+                      Register Now
                       <ArrowUpRight className="h-4 w-4" />
                     </Link>
-                  </div>
+                  )}
+                  <Link
+                    href={`/events/${spotlight.slug}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 text-xs font-medium uppercase tracking-wider text-foreground/70 hover:text-foreground transition-colors"
+                  >
+                    View Details
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </article>
@@ -300,107 +299,82 @@ export default async function EventsPage() {
         </div>
       </section>
 
-      <section className="pb-20 sm:pb-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-foreground/60">Upcoming gatherings</p>
-              <h2 className="text-pretty text-3xl sm:text-4xl font-semibold tracking-tight">Stay in the loop, miss garnu bhaye FOMO</h2>
+      <section className="py-32 border-t border-foreground/10">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mb-16">
+            <div className="inline-flex border border-foreground/20 px-4 py-2 mb-6">
+              <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                Upcoming Gatherings
+              </p>
             </div>
-            <div className="flex gap-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <CalendarClock className="h-3.5 w-3.5" />
-                Calendar view
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <Users className="h-3.5 w-3.5" />
-                Meetups
-              </span>
-            </div>
+            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              Don't Miss Out
+            </h2>
           </div>
 
-          <div className="mt-10 sm:mt-14 grid gap-6 sm:gap-8 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {otherEvents.length === 0 ? (
-              <div className="col-span-full rounded-3xl border border-foreground/12 bg-background/85 p-8 text-center text-sm uppercase tracking-[0.35em] text-foreground/60">
-                More gatherings coming soon. Meanwhile, explore the featured program above.
+              <div className="col-span-full border border-foreground/20 p-12 text-center">
+                <p className="text-sm uppercase tracking-wider text-foreground/60">
+                  More events coming soon. Meanwhile, explore the featured event above.
+                </p>
               </div>
             ) : (
               otherEvents.map((event) => {
                 const schedule = formatSchedule(event)
-                const tags = getEventTags(event)
                 const eventImage = event.image && event.image.trim() ? event.image.trim() : null
 
                 return (
                   <article
                     key={event.slug}
-                    className="flex h-full flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/85 backdrop-blur"
+                    className="group border border-foreground/20 bg-background hover:border-foreground/40 transition-colors"
                   >
-                    <div className="relative h-48 w-full overflow-hidden rounded-t-3xl">
+                    <div className="relative h-64 w-full overflow-hidden">
                       {eventImage ? (
                         <Image
                           src={eventImage}
                           alt={event.title}
                           fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover transition-transform group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 33vw"
                         />
                       ) : (
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,theme(colors.primary)/24%,transparent_70%)]" />
+                        <div className="absolute inset-0 bg-foreground/5" />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/40 to-background/10" />
-                      <div className="absolute inset-0 flex flex-col justify-end p-6">
-                        <span className="text-xs uppercase tracking-[0.35em] text-foreground/65">Upcoming</span>
-                        <p className="text-sm font-semibold text-foreground/85">{schedule.date}</p>
-                        <p className="text-xs text-foreground/60">{schedule.time}</p>
-                      </div>
                     </div>
-                    <div className="flex flex-col gap-5 p-6 sm:p-8">
-                      <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                          <CalendarDays className="h-3.5 w-3.5" />
+                    
+                    <div className="border-t border-foreground/20 p-6 space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                          <CalendarDays className="h-3 w-3" />
                           {schedule.date}
                         </span>
-                        <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                          <Clock className="h-3.5 w-3.5" />
+                        <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                          <Clock className="h-3 w-3" />
                           {schedule.time}
                         </span>
                       </div>
-                      <h3 className="text-pretty text-xl sm:text-2xl font-semibold text-foreground/90">{event.title}</h3>
-                      <p className="text-pretty text-base leading-relaxed text-foreground/75">
+                      
+                      <h3 className="text-xl font-bold tracking-tight line-clamp-2">
+                        {event.title}
+                      </h3>
+                      
+                      <p className="text-sm leading-relaxed text-foreground/70 line-clamp-3">
                         {getEventSummary(event)}
                       </p>
-                      {/* {tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.25em] text-foreground/60">
-                          {tags.map((item) => (
-                            <span key={item} className="rounded-full border border-foreground/15 px-3 py-1">
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      )} */}
-                      <div className="mt-2 flex flex-wrap items-center justify-between gap-3 border-t border-foreground/10 pt-6 text-xs uppercase tracking-[0.3em] text-foreground/65">
-                        <span className="inline-flex items-center gap-2">
-                          <MapPin className="h-3.5 w-3.5" />
+                      
+                      <div className="flex items-center justify-between pt-4 border-t border-foreground/10">
+                        <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                          <MapPin className="h-3 w-3" />
                           {getLocationLabel(event)}
                         </span>
-                        <div className="flex flex-wrap items-center gap-2">
-                          {event.registrationUrl && (
-                            <Link
-                              href={event.registrationUrl}
-                              className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/70 transition-colors hover:text-foreground/90"
-                            >
-                              Register
-                              <ArrowUpRight className="h-4 w-4" />
-                            </Link>
-                          )}
-                          <Link
-                            href={`/events/${event.slug}`}
-                            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/70 transition-colors hover:text-foreground/90"
-                          >
-                            Event details
-                            <ArrowUpRight className="h-4 w-4" />
-                          </Link>
-                        </div>
+                        <Link
+                          href={`/events/${event.slug}`}
+                          className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-foreground/70 hover:text-foreground transition-colors"
+                        >
+                          Details
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
                       </div>
                     </div>
                   </article>

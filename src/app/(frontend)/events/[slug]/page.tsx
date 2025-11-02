@@ -231,126 +231,164 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
   return (
     <main className="w-full bg-background text-foreground">
-      <section className="relative isolate overflow-hidden py-20">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,theme(colors.primary)/18%,transparent_55%),radial-gradient(circle_at_80%_10%,theme(colors.primary)/8%,transparent_45%)]" />
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="flex flex-col gap-6">
-            <Link
-              href="/events"
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-xs uppercase tracking-[0.35em] text-foreground/60 transition-colors hover:text-foreground/85"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to events
-            </Link>
+      <section className="py-10">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <Link
+            href="/events"
+            className="inline-flex items-center gap-2 border border-foreground/20 px-4 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60 hover:border-foreground/40 hover:text-foreground/80 transition-colors mb-12"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Events
+          </Link>
 
-            <div className="relative overflow-hidden rounded-3xl border border-foreground/12 bg-background/90">
-              <div className="relative h-64 w-full">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
-                    alt={event.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 66vw"
-                    priority
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/24%,transparent_70%)]" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/10" />
+          <div className="mt-0">
+            <div className="relative h-96 w-full overflow-hidden border border-foreground/20">
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt={event.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 bg-foreground/5" />
+              )}
+            </div>
+
+            <div className="border-x border-b border-foreground/20 p-8 sm:p-12 space-y-6">
+              <div className="flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  {schedule.date}
+                </span>
+                <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                  <Clock className="h-3.5 w-3.5" />
+                  {schedule.time}
+                </span>
+                <span className="inline-flex items-center gap-2 border border-foreground/20 px-3 py-2 text-xs font-medium uppercase tracking-wider text-foreground/60">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {locationLabel}
+                </span>
               </div>
-              <div className="flex flex-col gap-4 p-8">
-                <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-foreground/55">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                    <CalendarDays className="h-3.5 w-3.5" />
-                    {schedule.date}
-                  </span>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                    <Clock className="h-3.5 w-3.5" />
-                    {schedule.time}
-                  </span>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                    <MapPin className="h-3.5 w-3.5" />
-                    {locationLabel}
-                  </span>
+
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                {event.title}
+              </h1>
+
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {tags.map(tag => (
+                    <span 
+                      key={tag} 
+                      className="border border-foreground/20 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-foreground/60"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-foreground/95">{event.title}</h1>
-                {tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.35em] text-foreground/60">
-                    {tags.map(tag => (
-                      <span key={tag} className="rounded-full border border-foreground/15 px-4 py-2">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="pb-20">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          {event.summary && (<p className="text-base leading-relaxed text-foreground/70">{event.summary}</p>
-          )}
+      <section className="py-10 border-t border-foreground/10">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-8">
+              {event.summary && (
+                <div className="space-y-4">
+                  <div className="inline-flex border border-foreground/20 px-4 py-2">
+                    <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                      Overview
+                    </p>
+                  </div>
+                  <p className="text-lg leading-relaxed text-foreground/70">
+                    {event.summary}
+                  </p>
+                </div>
+              )}
 
-          {descriptionContent.lexicalState ? (
-            <div className="mt-10">
-              <LexicalRenderer
-                state={descriptionContent.lexicalState}
-                contentClassName="space-y-6 text-base leading-relaxed text-foreground/70 [&_strong]:text-foreground [&_em]:italic"
-              />
+              {descriptionContent.lexicalState ? (
+                <div className="space-y-4">
+                  {/* <div className="inline-flex border border-foreground/20 px-4 py-2">
+                    <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                      Details
+                    </p>
+                  </div> */}
+                  <LexicalRenderer
+                    state={descriptionContent.lexicalState}
+                    contentClassName="space-y-6 text-base leading-relaxed text-foreground/70 [&_strong]:text-foreground [&_em]:italic [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:mt-8 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:tracking-tight [&_h3]:mt-6"
+                  />
+                </div>
+              ) : descriptionContent.paragraphs.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="inline-flex border border-foreground/20 px-4 py-2">
+                    <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                      Details
+                    </p>
+                  </div>
+                  <div className="space-y-6 text-base leading-relaxed text-foreground/70">
+                    {descriptionContent.paragraphs.map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
-          ) : descriptionContent.paragraphs.length > 0 ? (
-            <div className="mt-10 space-y-6 text-base leading-relaxed text-foreground/70">
-              {descriptionContent.paragraphs.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-            </div>
-          ) : null}
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-3xl border border-foreground/12 bg-background/85 p-6 backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.35em] text-foreground/55">Schedule</p>
-              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/75">
-                <span className="inline-flex items-center gap-2">
-                  <CalendarDays className="h-4 w-4" />
-                  {schedule.date}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  {schedule.time}
-                </span>
+            <div className="lg:col-span-1 space-y-6">
+              <div className="border border-foreground/20 p-6 space-y-4">
+                <div className="inline-flex border border-foreground/20 px-3 py-1.5">
+                  <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                    Schedule
+                  </p>
+                </div>
+                <div className="space-y-3 text-sm text-foreground/70">
+                  <div className="flex items-start gap-3 pb-3 border-b border-foreground/10">
+                    <CalendarDays className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{schedule.date}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{schedule.time}</span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div className="rounded-3xl border border-foreground/12 bg-background/85 p-6 backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.35em] text-foreground/55">Hosted by</p>
-              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/75">
-                <span className="inline-flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  {event.organizer?.name ?? event.organizer?.email ?? "Innovation Lab"}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  {locationLabel}
-                </span>
+              <div className="border border-foreground/20 p-6 space-y-4">
+                <div className="inline-flex border border-foreground/20 px-3 py-1.5">
+                  <p className="text-xs font-medium uppercase tracking-wider text-foreground/60">
+                    Event Info
+                  </p>
+                </div>
+                <div className="space-y-3 text-sm text-foreground/70">
+                  <div className="flex items-start gap-3 pb-3 border-b border-foreground/10">
+                    <Users className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{event.organizer?.name ?? event.organizer?.email ?? "Innovation Lab"}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{locationLabel}</span>
+                  </div>
+                </div>
               </div>
+
+              {event.registrationUrl && (
+                <Link
+                  href={event.registrationUrl}
+                  className="block w-full border border-foreground/30 px-6 py-4 text-center text-xs font-medium uppercase tracking-wider text-foreground hover:bg-foreground hover:text-background transition-colors"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    Reserve Your Spot
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              )}
             </div>
           </div>
-
-          {event.registrationUrl && (
-            <div className="mt-12 flex justify-center">
-              <Link
-                href={event.registrationUrl}
-                className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3 text-xs uppercase tracking-[0.35em] text-foreground/70 transition-colors hover:text-foreground/90"
-              >
-                Reserve your spot
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
-          )}
         </div>
       </section>
     </main>

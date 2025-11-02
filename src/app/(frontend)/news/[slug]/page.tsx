@@ -142,49 +142,53 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
 
   return (
     <main className="w-full bg-background text-foreground">
-      <section className="relative isolate overflow-hidden py-16 sm:py-20">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,theme(colors.primary)/18%,transparent_55%),radial-gradient(circle_at_80%_10%,theme(colors.primary)/8%,transparent_45%)]" />
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-6">
+      {/* Header Section */}
+      <section className="relative py-20 border-b border-foreground/10">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="flex flex-col gap-8">
             <Link
               href="/news"
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/65 transition-colors hover:text-foreground/90"
+              className="inline-flex w-fit items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-wider text-foreground/70 hover:text-foreground transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to news
+              Back to News
             </Link>
-            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.25em] text-foreground/60">
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <User className="h-3.5 w-3.5" />
-                {author}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <CalendarDays className="h-3.5 w-3.5" />
-                {publishedMeta.label}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <Clock className="h-3.5 w-3.5" />
-                {readingTime}
-              </span>
-            </div>
-            <h1 className="text-pretty text-3xl sm:text-5xl font-semibold tracking-tight">{article.title}</h1>
-            {chips.length > 0 && (
-              <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.25em] text-foreground/60">
-                {chips.map((chip) => (
-                  <span key={chip} className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                    <Tag className="h-3 w-3" />
-                    {chip}
-                  </span>
-                ))}
+            
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-wider text-foreground/50">
+                <span>{author}</span>
+                <span>•</span>
+                <span>{publishedMeta.label}</span>
+                <span>•</span>
+                <span>{readingTime}</span>
               </div>
-            )}
+              
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+                {article.title}
+              </h1>
+              
+              {chips.length > 0 && (
+                <div className="flex flex-wrap gap-3">
+                  {chips.map((chip) => (
+                    <span 
+                      key={chip} 
+                      className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-wider text-foreground/60"
+                    >
+                      <Tag className="h-3 w-3" />
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="relative">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="relative h-[280px] sm:h-[360px] lg:h-[420px] w-full overflow-hidden rounded-3xl border border-foreground/12 bg-background/80 backdrop-blur">
+      {/* Cover Image Section */}
+      <section className="relative py-16 border-b border-foreground/10">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="relative h-[320px] sm:h-[420px] lg:h-[520px] w-full overflow-hidden border border-foreground/10">
             {coverImage ? (
               <Image
                 src={coverImage}
@@ -195,36 +199,39 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
                 priority
               />
             ) : (
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,theme(colors.primary)/24%,transparent_70%)]" />
+              <div className="w-full h-full flex items-center justify-center bg-foreground/5">
+                <p className="text-sm uppercase tracking-wider text-foreground/40">No cover image</p>
+              </div>
             )}
           </div>
         </div>
       </section>
 
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      {/* Article Content Section */}
+      <section className="py-20">
+        <div className="mx-auto max-w-3xl px-6 lg:px-8">
           {excerpt && (
-            <div className="space-y-3 text-pretty text-base sm:text-lg leading-relaxed text-foreground/80">
-              <p>{excerpt}</p>
+            <div className="space-y-4 text-lg leading-relaxed text-foreground/80 mb-12 pb-12 border-b border-foreground/10">
+              <p className="font-medium">{excerpt}</p>
             </div>
           )}
 
           {normalizedContent.serialized ? (
-            <div className="mt-10">
+            <div className="prose-custom">
               <LexicalRenderer
                 state={normalizedContent.serialized}
-                contentClassName="space-y-6 text-pretty text-base sm:text-lg leading-relaxed text-foreground/80 [&_strong]:text-foreground"
+                contentClassName="space-y-6 text-base leading-relaxed text-foreground/80 [&_strong]:font-semibold [&_strong]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-12 [&_h2]:mb-6 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-4"
               />
             </div>
           ) : normalizedContent.paragraphs.length > 0 ? (
-            <div className="mt-10 space-y-6 text-pretty text-base sm:text-lg leading-relaxed text-foreground/80">
+            <div className="space-y-6 text-base leading-relaxed text-foreground/80">
               {normalizedContent.paragraphs.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
           ) : null}
 
-          <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-foreground/10 pt-8 text-xs uppercase tracking-[0.25em] text-foreground/55">
+          <div className="mt-16 pt-8 border-t border-foreground/10 flex flex-wrap items-center justify-between gap-4 text-xs uppercase tracking-wider text-foreground/50">
             <div className="flex items-center gap-2">
               <CalendarDays className="h-3.5 w-3.5" />
               <time dateTime={publishedDateTime}>{publishedMeta.label}</time>

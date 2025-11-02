@@ -146,88 +146,57 @@ export default async function NewsPage() {
 
   return (
     <main className="w-full bg-background text-foreground">
-      <section className="relative isolate overflow-hidden py-20 sm:py-24">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/20%,transparent_60%),radial-gradient(circle_at_80%_0%,theme(colors.primary)/12%,transparent_45%)]" />
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="space-y-8 sm:space-y-10">
-              <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.35em] text-foreground/60">
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Lab Journal</span>
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Insights</span>
-                <span className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">Playbooks</span>
+      {/* Hero Section with Featured Article */}
+      <section className="relative min-h-[80vh] flex items-center border-b border-foreground/10">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10 w-full">
+          <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                Lab Journal
               </div>
-              <h1 className="text-pretty text-3xl sm:text-4xl lg:text-6xl font-semibold tracking-tight">
-                Stories ra rituals jaba chiya, keyboard, imagination collide.
-              </h1>
-              <p className="text-pretty text-base sm:text-lg leading-relaxed text-foreground/80 max-w-2xl">
-                Explore field notes from the lab, dispatches from our residencies, and behind-the-scenes experiments.
-              </p>
-              <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                {featuredArticle.chips.length > 0
-                  ? featuredArticle.chips.map((chip) => (
-                      <span key={chip} className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">
-                        {chip}
-                      </span>
-                    ))
-                  : ["Strategy Sprints", "Prototype Studio", "Residency", "Learning Hubs"].map((tag) => (
-                      <span key={tag} className="rounded-full border border-foreground/15 px-3 py-2 sm:px-4">
-                        {tag}
-                      </span>
-                    ))}
+              
+              <div className="space-y-6">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+                  NEWS &
+                  <br />
+                  <span className="text-foreground/60">INSIGHTS</span>
+                </h1>
+                <p className="text-xl leading-relaxed text-foreground/70 max-w-xl">
+                  Explore field notes from the lab, dispatches from our residencies, and behind-the-scenes experiments.
+                </p>
               </div>
             </div>
-            <article className="group rounded-3xl border border-foreground/12 bg-background/85 backdrop-blur">
-              <div className="relative h-64 sm:h-72 lg:h-80 w-full overflow-hidden rounded-t-3xl">
-                {featuredArticle.coverImage ? (
+
+            {/* Featured Article Card */}
+            <article className="group border border-foreground/10 hover:border-foreground/30 transition-colors">
+              {featuredArticle.coverImage && (
+                <div className="relative h-72 w-full overflow-hidden">
                   <Image
                     src={featuredArticle.coverImage}
                     alt={featuredArticle.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
-                ) : (
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,theme(colors.primary)/24%,transparent_70%)]" />
-                )}
-              </div>
-              <div className="space-y-5 p-6 sm:p-10">
-                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/55">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                    <User className="h-3.5 w-3.5" />
-                    {featuredArticle.author}
-                  </span>
-                  <span className="hidden h-1 w-1 rounded-full bg-foreground/40 sm:inline-block" />
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                    <CalendarDays className="h-3.5 w-3.5" />
-                    {featuredArticle.publishedDate}
-                  </span>
-                  <span className="hidden h-1 w-1 rounded-full bg-foreground/40 sm:inline-block" />
-                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                    <Clock className="h-3.5 w-3.5" />
-                    {featuredArticle.readTime}
-                  </span>
                 </div>
-                <h2 className="text-pretty text-xl sm:text-2xl font-semibold text-foreground/90">{featuredArticle.title}</h2>
-                <p className="text-pretty text-base leading-relaxed text-foreground/75">{featuredArticle.excerpt}</p>
-                {featuredArticle.chips.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {featuredArticle.chips.map((chip) => (
-                      <span
-                        key={chip}
-                        className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-1 text-xs uppercase tracking-[0.25em] text-foreground/60"
-                      >
-                        <Tag className="h-3 w-3" />
-                        {chip}
-                      </span>
-                    ))}
-                  </div>
-                )}
+              )}
+              <div className="space-y-6 p-8">
+                <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-wider text-foreground/50">
+                  <span>{featuredArticle.author}</span>
+                  <span>•</span>
+                  <span>{featuredArticle.publishedDate}</span>
+                  <span>•</span>
+                  <span>{featuredArticle.readTime}</span>
+                </div>
+                <h2 className="text-2xl font-semibold text-foreground/90 leading-tight">{featuredArticle.title}</h2>
+                <p className="text-base leading-relaxed text-foreground/75">{featuredArticle.excerpt}</p>
                 <Link
                   href={`/news/${featuredArticle.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/65 transition-colors hover:text-foreground/90"
+                  className="inline-flex items-center gap-2 text-sm uppercase tracking-wider hover:text-foreground transition-colors"
                 >
-                  Read story
+                  Read Article
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -236,76 +205,60 @@ export default async function NewsPage() {
         </div>
       </section>
 
-      <section className="pb-20 sm:pb-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-foreground/60">Browse the archive</p>
-              <h2 className="text-pretty text-3xl sm:text-4xl font-semibold tracking-tight">
-                Fresh perspectives, kurakani ra memes
-              </h2>
-            </div>
-            <div className="flex gap-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <Sparkles className="h-3.5 w-3.5" />
-                Highlights
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                <MessageCircle className="h-3.5 w-3.5" />
-                Dialogues
-              </span>
-            </div>
+      {/* Articles Grid Section */}
+      <section className="py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="space-y-4 mb-16">
+            <p className="text-xs uppercase tracking-widest text-foreground/50">Browse Archive</p>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              Latest Stories
+            </h2>
           </div>
 
-          <div className="mt-10 sm:mt-14 grid gap-6 sm:gap-8 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {otherArticles.length === 0 ? (
-              <div className="col-span-full rounded-3xl border border-foreground/12 bg-background/85 p-8 text-center text-sm uppercase tracking-[0.35em] text-foreground/60">
-                More stories are on the way. In the meantime, explore the featured article above.
+              <div className="col-span-full border border-foreground/10 p-12 text-center">
+                <p className="text-sm uppercase tracking-wider text-foreground/60">
+                  More stories are on the way. Check back soon.
+                </p>
               </div>
             ) : (
               otherArticles.map((article) => (
                 <article
                   key={article.slug}
-                  className="group flex h-full flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/85 p-6 sm:p-8 backdrop-blur"
+                  className="group border border-foreground/10 hover:border-foreground/30 transition-colors"
                 >
-                  <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/55">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                      <User className="h-3.5 w-3.5" />
-                      {article.author}
-                    </span>
-                    <span className="hidden h-1 w-1 rounded-full bg-foreground/40 sm:inline-block" />
-                    <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {article.publishedDate}
-                    </span>
-                    <span className="hidden h-1 w-1 rounded-full bg-foreground/40 sm:inline-block" />
-                    <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2">
-                      <Clock className="h-3.5 w-3.5" />
-                      {article.readTime}
-                    </span>
-                  </div>
-                  <h3 className="text-pretty text-xl sm:text-2xl font-semibold text-foreground/90">{article.title}</h3>
-                  <p className="text-pretty text-base leading-relaxed text-foreground/75">{article.excerpt}</p>
-                  {/* {article.chips.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {article.chips.map((chip) => (
-                        <span
-                          key={chip}
-                          className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-1 text-xs uppercase tracking-[0.25em] text-foreground/60"
-                        >
-                          <Tag className="h-3 w-3" />
-                          {chip}
-                        </span>
-                      ))}
+                  {article.coverImage && (
+                    <div className="relative h-56 w-full overflow-hidden">
+                      <Image
+                        src={article.coverImage}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
                     </div>
-                  )} */}
-                  <Link
-                    href={`/news/${article.slug}`}
-                    className="mt-auto inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.25em] text-foreground/65 transition-colors hover:text-foreground/90"
-                  >
-                    Read story
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
+                  )}
+                  <div className="p-8 space-y-4">
+                    <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-wider text-foreground/50">
+                      <span>{article.author}</span>
+                      <span>•</span>
+                      <span>{article.publishedDate}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-foreground/90 leading-tight group-hover:text-foreground/70 transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-foreground/70 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                    <Link
+                      href={`/news/${article.slug}`}
+                      className="inline-flex items-center gap-2 text-sm uppercase tracking-wider hover:text-foreground transition-colors"
+                    >
+                      Read Article
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </article>
               ))
             )}

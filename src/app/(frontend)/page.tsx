@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
     ArrowUpRight,
+    ArrowRight,
     CalendarDays,
     CircleDashed,
     MessageCircle,
@@ -15,6 +16,10 @@ import {
     Trophy,
     Users,
     Zap,
+    CheckCircle2,
+    Lightbulb,
+    Code2,
+    Briefcase,
 } from "lucide-react";
 
 import { HttpError } from "@/lib/http/api-client";
@@ -37,6 +42,7 @@ interface NewsItem {
 }
 
 interface EventItem {
+    image: string | null;
     date: string;
     time: string;
     title: string;
@@ -47,6 +53,7 @@ interface EventItem {
 }
 
 interface FallbackTestimonial {
+    avatarUrl: string | null;
     quote: string;
     author: string;
     role: string;
@@ -90,6 +97,7 @@ const FALLBACK_NEWS: NewsItem[] = [
 
 const FALLBACK_EVENTS: EventItem[] = [
     {
+        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80",
         date: "Nov 12, 2025",
         time: "10:00 AM – 5:00 PM",
         title: "PASTRAMA 2025: Ideas, momo, repeat",
@@ -100,6 +108,7 @@ const FALLBACK_EVENTS: EventItem[] = [
         link: "#",
     },
     {
+        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
         date: "Dec 05, 2025",
         time: "9:00 AM – 3:00 PM",
         title: "BYE BYE C QUEST 3.0: Last minute hero mode",
@@ -110,6 +119,7 @@ const FALLBACK_EVENTS: EventItem[] = [
         link: "#",
     },
     {
+        image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80",
         date: "Jan 20, 2026",
         time: "11:00 AM – 6:00 PM",
         title: "WHAT THE HEX 3.0: Demo gara, wow sun",
@@ -123,18 +133,21 @@ const FALLBACK_EVENTS: EventItem[] = [
 
 const FALLBACK_TESTIMONIALS: FallbackTestimonial[] = [
     {
+        avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
         quote:
             "Morning standup ma punchline diyera sabai lai jagaaunu parcha. Yo team le deadline lai pani comedian banaucha, believe me.",
         author: "Manjeyy Gautam",
         role: "CEO, NASA (allegedly)",
     },
     {
+        avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
         quote:
             "Prototype demo dekhi signature chai latte samma handle garne talent. Innovation lai kehi bhaye ni meme ready, respect!",
         author: "Anshu Punchgain",
         role: "CTO, Nykaa ko maato",
     },
     {
+        avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
         quote:
             "Yesko presentation ma lights off bhaye pani energy on. I could not see them, tara uniharule future dekheshan, wow!",
         author: "John Cena",
@@ -403,6 +416,7 @@ function mapEventRecord(event: EventRecord): EventItem {
     const schedule = formatEventSchedule(event);
 
     return {
+        image: safeUrl(event.image),
         date: schedule.date,
         time: schedule.time,
         title: event.title,
@@ -549,12 +563,14 @@ export default function Frontend() {
         testimonials.length > 0
             ? testimonials.map((item) => ({
                   key: `testimonial-${item.id}`,
+                  image: safeUrl(item.avatarUrl),
                   quote: item.quote,
                   author: item.author,
                   role: [item.role, item.company].filter(Boolean).join(" · ") || undefined,
               }))
             : FALLBACK_TESTIMONIALS.map((item, index) => ({
                   key: `fallback-${index}`,
+                  image: item.avatarUrl,
                   quote: item.quote,
                   author: item.author,
                   role: item.role,
@@ -568,278 +584,189 @@ export default function Frontend() {
 
     return (
         <main className="w-full bg-background text-foreground">
-            <section className="relative isolate overflow-hidden py-12">
-                <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/15%,transparent_60%),radial-gradient(circle_at_80%_0%,theme(colors.primary)/8%,transparent_45%)]" />
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="grid gap-16 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-                        <div className="space-y-10">
-                            <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.35em] text-foreground/60">
-                                <span className="rounded-full border border-foreground/15 px-4 py-2">Innovation Lab</span>
-                                <span className="rounded-full border border-foreground/15 px-4 py-2">Itahari International College</span>
+
+
+            <section className="relative min-h-[90vh] flex items-center border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+                    <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
+                        <div className="space-y-8">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
+                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                Itahari International College
                             </div>
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
-                                INNOVATION LAB TURNS HAREBRAINED KHYAL INTO GAJAB SOLUTIONS, HAINA RA!
-                            </h1>
-                            <p className="text-lg leading-relaxed text-foreground/70 max-w-2xl">
-                                From "batti gayo" brainstorms to "haiyaa deadline" deliveries, we remix chaos, chiya, and code. Hamro mantra simple ho: dream wild, build faster, laugh out loud while Git commits clean huncha.
-                            </p>
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                                <Button size="lg" className="rounded-full px-8 py-6 text-sm uppercase tracking-wide">
-                                    LET&apos;S EXPLORE
+                            
+                            <div className="space-y-6">
+                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+                                    INNOVATION
+                                    <br />
+                                    <span className="text-foreground/60">LAB</span>
+                                </h1>
+                                <p className="text-xl leading-relaxed text-foreground/70 max-w-xl">
+                                    Transforming bold ideas into real-world solutions through technology, creativity, and collaborative innovation.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4">
+                                <Button size="lg" className="px-8 text-sm uppercase tracking-wider">
+                                    Explore Projects
+                                    <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
                                 <Button
                                     size="lg"
-                                    variant="ghost"
-                                    className="rounded-full border border-foreground/20 px-8 py-6 text-sm uppercase tracking-wide"
+                                    variant="outline"
+                                    className="px-8 text-sm uppercase tracking-wider"
                                 >
-                                    JOIN THE MAYA
+                                    Get Involved
                                 </Button>
                             </div>
                         </div>
-                        <div className="grid gap-5">
-                            <div className="rounded-3xl border border-foreground/12 bg-gradient-to-br from-primary/12 via-background to-background p-8 backdrop-blur">
-                                <p className="text-sm uppercase tracking-[0.35em] text-foreground/60">Inside the lab</p>
-                                <p className="mt-4 text-xl font-semibold leading-relaxed text-foreground/90">
-                                    Morning standup ma jokes, rati samma shandar demos. Yo lab ko recipe: wild imagination + wai wai + adhuro charging cable = magic.
-                                </p>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4">
-                                {statBadges.map((badge) => (
-                                    <div
-                                        key={badge.label}
-                                        className="rounded-3xl border border-foreground/12 bg-background/85 p-6 text-center backdrop-blur"
-                                    >
-                                        <span className="block text-3xl font-semibold">{badge.value}</span>
-                                        <span className="mt-2 block text-xs uppercase tracking-[0.3em] text-foreground/55">
-                                            {badge.label}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <section className="py-24">
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Ke garnu?</p>
-                            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">Teamwork le banayo bandhaki chill innovation</h2>
-                        </div>
-                        <p className="max-w-xl text-sm leading-relaxed text-foreground/65">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis dui lacus, nec sodales eros.
-                        </p>
-                    </div>
-                    <div className="mt-14 grid gap-6 md:grid-cols-3">
-                        {capabilityTiles.map((tile) => {
-                            const Icon = tile.icon;
-                            return (
-                                <div
-                                    key={tile.title}
-                                    className="flex h-full flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/80 p-8 backdrop-blur"
-                                >
-                                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20">
-                                        <Icon className="h-5 w-5" />
-                                    </span>
-                                    <div>
-                                        <h3 className="text-xl font-semibold text-foreground/90">{tile.title}</h3>
-                                        <p className="mt-3 text-sm leading-relaxed text-foreground/65">{tile.description}</p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-4">
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Target className="h-6 w-6" />
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        className="mt-auto w-fit rounded-full border border-transparent px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60 hover:border-foreground/20"
-                                    >
-                                        Explore
-                                    </Button>
+                                    <h3 className="text-2xl font-bold mb-2">500+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Projects</p>
                                 </div>
-                            );
-                        })}
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Users className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">50+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Members</p>
+                                </div>
+                            </div>
+                            <div className="space-y-4 pt-12">
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Trophy className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">25</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Awards</p>
+                                </div>
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <CalendarDays className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">12+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Years</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section className="py-24 bg-gradient-to-br from-background via-primary/10 to-background">
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Stories in motion</p>
-                            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">News &amp; gossip worth screenshot</h2>
+            <section className="py-32 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+                        <div className="space-y-6">
+                            <div className="space-y-4">
+                                <p className="text-xs uppercase tracking-widest text-foreground/50">What We Do</p>
+                                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                                    Innovation Through Collaboration
+                                </h2>
+                            </div>
+                            <p className="text-lg leading-relaxed text-foreground/70">
+                                At the Innovation Lab, we empower students to transform bold ideas into real-world solutions. Through collaborative experimentation, cutting-edge technology, and creative thinking, we're shaping the future.
+                            </p>
                         </div>
-                        <Button className="h-12 w-12 rounded-full shadow-none" variant="outline" asChild>
-                            <Link href="/news" aria-label="Browse all news">
-                                <ArrowUpRight className="h-5 w-5" />
+
+                        <div className="space-y-6">
+                            {[
+                                {
+                                    icon: Lightbulb,
+                                    title: "Ideation & Design",
+                                    description: "From concept to prototype, we help students explore innovative solutions to real-world challenges."
+                                },
+                                {
+                                    icon: Code2,
+                                    title: "Technical Development",
+                                    description: "Hands-on experience with cutting-edge tools, frameworks, and technologies across multiple domains."
+                                },
+                                {
+                                    icon: Briefcase,
+                                    title: "Project Execution",
+                                    description: "Transform ideas into fully-realized projects with mentorship and industry-standard practices."
+                                }
+                            ].map((item, index) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div key={index} className="border-l-2 border-foreground/20 pl-6 py-2">
+                                        <div className="flex items-start gap-4">
+                                            <Icon className="h-6 w-6 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                                                <p className="text-foreground/70 leading-relaxed">{item.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-32 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
+                        <div className="space-y-4">
+                            <p className="text-xs uppercase tracking-widest text-foreground/50">Latest Updates</p>
+                            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">News & Insights</h2>
+                        </div>
+                        <Button variant="outline" className="w-fit" asChild>
+                            <Link href="/news">
+                                View All News
+                                <ArrowUpRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
                     </div>
-                    {newsError && (
-                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-destructive">
-                            {newsError}. Showing our crowd favorite archive for now.
-                        </p>
-                    )}
-                    {showNewsArchiveNotice && (
-                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                            Fresh dispatches brewing. Until then, enjoy some classic lab headlines.
-                        </p>
-                    )}
-                    <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                        {primaryNews ? (
-                            <article className="group relative overflow-hidden rounded-3xl border border-foreground/12 bg-background/90 backdrop-blur">
-                                <div className="relative h-72 w-full">
-                                    {primaryNews.image ? (
-                                        <Image
-                                            src={primaryNews.image}
-                                            alt={primaryNews.title}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                            sizes="(max-width: 1024px) 100vw, 50vw"
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,theme(colors.primary)/24%,transparent_70%)]" />
-                                    )}
-                                </div>
-                                <div className="space-y-5 p-10">
-                                    <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                        <span>{primaryNews.category}</span>
-                                        <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                        <span>{primaryNews.date}</span>
-                                        <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                        <span>{primaryNews.readTime}</span>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-foreground/90">{primaryNews.title}</h3>
-                                    <p className="text-sm leading-relaxed text-foreground/65">{primaryNews.description}</p>
-                                    {primaryNews.href === "#" ? (
-                                        <Button
-                                            variant="ghost"
-                                            className="rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                            disabled
-                                        >
-                                            La read gara
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="ghost"
-                                            className="rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                            asChild
-                                        >
-                                            <Link href={primaryNews.href} aria-label={`Read ${primaryNews.title}`}>
-                                                La read gara
-                                            </Link>
-                                        </Button>
-                                    )}
-                                </div>
-                            </article>
-                        ) : (
-                            <div className="flex items-center justify-center rounded-3xl border border-foreground/12 bg-background/90 p-10 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                                Stories coming soon.
-                            </div>
-                        )}
-                        <div className="grid gap-6">
-                            {secondaryNews.length === 0 ? (
-                                <div className="flex h-full items-center justify-center rounded-3xl border border-foreground/12 bg-background/80 p-8 text-center text-xs uppercase tracking-[0.3em] text-foreground/60">
-                                    More stories on the way.
-                                </div>
-                            ) : (
-                                secondaryNews.map((item, index) => (
-                                    <article
-                                        key={`${item.href}-${index}`}
-                                        className="group flex flex-col rounded-3xl border border-foreground/12 bg-background/80 p-8 backdrop-blur"
-                                    >
-                                        <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                            <span>{item.category}</span>
-                                            <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                            <span>{item.date}</span>
-                                            <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                            <span>{item.readTime}</span>
-                                        </div>
-                                        <h3 className="mt-4 text-xl font-semibold text-foreground/90">{item.title}</h3>
-                                        <p className="mt-3 text-sm leading-relaxed text-foreground/65">{item.description}</p>
-                                        {item.href === "#" ? (
-                                            <Button
-                                                variant="ghost"
-                                                className="mt-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                                disabled
-                                            >
-                                                La read gara
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="ghost"
-                                                className="mt-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                                asChild
-                                            >
-                                                <Link href={item.href} aria-label={`Read ${item.title}`}>
-                                                    La read gara
-                                                </Link>
-                                            </Button>
-                                        )}
-                                    </article>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <section className="py-24">
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Next up</p>
-                            <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">Events jaha laughter ra learning dubai</h2>
-                        </div>
-                        <Button className="rounded-full px-6 py-3 text-xs uppercase tracking-[0.3em] shadow-none" variant="outline" asChild>
-                            <Link href="/events">Calendar hera na</Link>
-                        </Button>
-                    </div>
-                    {eventsError && (
-                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-destructive">
-                            {eventsError}. Sharing our highlight reel meanwhile.
+                    {newsError && (
+                        <p className="mb-8 text-sm text-destructive border border-destructive/20 p-4">
+                            {newsError}
                         </p>
                     )}
-                    {showEventsArchiveNotice && (
-                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                            Fresh gatherings announcing soon. Till then, here are lab favorites.
-                        </p>
-                    )}
-                    <div className="mt-14 grid gap-6 lg:grid-cols-3">
-                        {eventCards.map((event, index) => (
+
+                    <div className="grid gap-8 lg:grid-cols-3">
+                        {newsCards.map((item, index) => (
                             <article
-                                key={`${event.link}-${index}`}
-                                className="flex h-full flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/85 p-8 backdrop-blur"
+                                key={`${item.href}-${index}`}
+                                className="group border border-foreground/10 hover:border-foreground/30 transition-colors"
                             >
-                                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                    <span>{event.date}</span>
-                                    <span>{event.time}</span>
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-3 py-1 text-xs uppercase tracking-[0.3em] text-foreground/55">
-                                        <CalendarDays className="h-3.5 w-3.5" />
-                                        {event.category}
-                                    </span>
-                                    <h3 className="text-xl font-semibold text-foreground/90">{event.title}</h3>
-                                    <p className="text-sm leading-relaxed text-foreground/65">{event.description}</p>
-                                </div>
-                                <div className="mt-auto flex items-center justify-between border-t border-foreground/15 pt-4 text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                    <span>{event.location}</span>
-                                    {event.link === "#" ? (
-                                        <Button
-                                            variant="ghost"
-                                            className="rounded-full px-3 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                            disabled
-                                        >
-                                            Details chai?
+                                {item.image && (
+                                    <div className="relative h-64 w-full overflow-hidden">
+                                        <Image
+                                            src={item.image}
+                                            alt={item.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 1024px) 100vw, 33vw"
+                                        />
+                                    </div>
+                                )}
+                                <div className="p-8 space-y-4">
+                                    <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-foreground/50">
+                                        <span>{item.category}</span>
+                                        <span>•</span>
+                                        <span>{item.date}</span>
+                                    </div>
+                                    <h3 className="text-xl font-semibold leading-tight group-hover:text-foreground/80 transition-colors">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-sm leading-relaxed text-foreground/70 line-clamp-3">
+                                        {item.description}
+                                    </p>
+                                    {item.href === "#" ? (
+                                        <Button variant="link" className="p-0 h-auto text-sm" disabled>
+                                            Read More →
                                         </Button>
                                     ) : (
-                                        <Button
-                                            variant="ghost"
-                                            className="rounded-full px-3 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
-                                            asChild
-                                        >
-                                            <Link href={event.link} aria-label={`View details for ${event.title}`}>
-                                                Details chai?
-                                            </Link>
+                                        <Button variant="link" className="p-0 h-auto text-sm" asChild>
+                                            <Link href={item.href}>Read More →</Link>
                                         </Button>
                                     )}
                                 </div>
@@ -849,101 +776,226 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-24 bg-gradient-to-b from-primary/10 via-background to-background">
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-                        <div className="space-y-8">
-                            <div>
-                                <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Tracks in focus</p>
-                                <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">Curiosity meets impact, dhamaal style</h2>
-                            </div>
-                            <p className="text-base leading-relaxed text-foreground/70">
-                                Residencies ra challenge programs ma hamro deep dive: pressing themes, playful playlists, ra pakkai pani empathy. Tech lai responsibly explore garne, tara fun flavor skip chaina.
-                            </p>
-                            <div className="grid gap-6 sm:grid-cols-3">
-                                {highlightTracks.map((track) => {
-                                    const Icon = track.icon;
-                                    return (
-                                        <div
-                                            key={track.title}
-                                            className="flex flex-col gap-3 rounded-3xl border border-foreground/12 bg-background/80 p-6 text-sm backdrop-blur"
-                                        >
-                                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20">
-                                                <Icon className="h-4 w-4" />
-                                            </span>
-                                            <h3 className="text-lg font-semibold text-foreground/90">{track.title}</h3>
-                                            <p className="text-foreground/65 leading-relaxed">{track.description}</p>
+            <section className="py-32 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
+                        <div className="space-y-4">
+                            <p className="text-xs uppercase tracking-widest text-foreground/50">Upcoming</p>
+                            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Events & Workshops</h2>
+                        </div>
+                        <Button variant="outline" className="w-fit" asChild>
+                            <Link href="/events">
+                                View All Events
+                                <ArrowUpRight className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </div>
+
+                    {eventsError && (
+                        <p className="mb-8 text-sm text-destructive border border-destructive/20 p-4">
+                            {eventsError}
+                        </p>
+                    )}
+
+                    <div className="grid gap-8 lg:grid-cols-3">
+                        {eventCards.map((event, index) => (
+                            <article
+                                key={`${event.link}-${index}`}
+                                className="border border-foreground/10 hover:border-foreground/30 transition-colors overflow-hidden group"
+                            >
+                                {event.image && (
+                                    <div className="relative h-56 w-full overflow-hidden">
+                                        <Image
+                                            src={event.image}
+                                            alt={event.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 1024px) 100vw, 33vw"
+                                        />
+                                    </div>
+                                )}
+                                <div className="p-8 space-y-6">
+                                    <div className="space-y-2">
+                                        <div className="text-xs uppercase tracking-wider text-foreground/50">
+                                            {event.date}
                                         </div>
-                                    );
-                                })}
+                                        <div className="text-sm text-foreground/70">{event.time}</div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <div className="inline-flex items-center gap-2 px-3 py-1 border border-foreground/20 text-xs uppercase tracking-wider text-foreground/60">
+                                            {event.category}
+                                        </div>
+                                        <h3 className="text-xl font-semibold leading-tight">{event.title}</h3>
+                                        <p className="text-sm leading-relaxed text-foreground/70">{event.description}</p>
+                                    </div>
+
+                                    <div className="pt-4 border-t border-foreground/10 flex items-center justify-between">
+                                        <span className="text-xs uppercase tracking-wider text-foreground/50">
+                                            {event.location}
+                                        </span>
+                                        {event.link === "#" ? (
+                                            <Button variant="link" className="p-0 h-auto text-sm" disabled>
+                                                Learn More →
+                                            </Button>
+                                        ) : (
+                                            <Button variant="link" className="p-0 h-auto text-sm" asChild>
+                                                <Link href={event.link}>Learn More →</Link>
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-32 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+                        <div className="space-y-8">
+                            <div className="space-y-4">
+                                <p className="text-xs uppercase tracking-widest text-foreground/50">Our Focus</p>
+                                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                                    Innovation Tracks
+                                </h2>
+                            </div>
+                            <p className="text-lg leading-relaxed text-foreground/70">
+                                We explore cutting-edge themes through our residency and challenge programs, combining technical excellence with responsible innovation and real-world impact.
+                            </p>
+
+                            <div className="grid gap-4 pt-8">
+                                <div className="border border-foreground/10 p-6">
+                                    <div className="flex items-center gap-4 mb-3">
+                                        <div className="w-10 h-10 border border-foreground/20 flex items-center justify-center">
+                                            <CheckCircle2 className="h-5 w-5" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold">Mentorship Programs</h3>
+                                    </div>
+                                    <p className="text-sm text-foreground/70 pl-14">110+ industry mentors guiding student projects</p>
+                                </div>
+                                <div className="border border-foreground/10 p-6">
+                                    <div className="flex items-center gap-4 mb-3">
+                                        <div className="w-10 h-10 border border-foreground/20 flex items-center justify-center">
+                                            <CheckCircle2 className="h-5 w-5" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold">Global Collaborations</h3>
+                                    </div>
+                                    <p className="text-sm text-foreground/70 pl-14">72+ international pilot projects launched</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="rounded-3xl border border-foreground/12 bg-background/75 p-10 backdrop-blur">
-                            <p className="text-sm uppercase tracking-[0.35em] text-foreground/50">Testimonials</p>
-                            <div className="mt-8 space-y-8">
-                                {testimonialsLoading && (
-                                    <div className="text-sm text-foreground/60">Loading testimonials…</div>
-                                )}
 
-                                {!testimonialsLoading &&
-                                    displayTestimonials.map((item, index) => (
-                                        <div key={item.key} className="space-y-4">
-                                            <p className="text-base leading-relaxed text-foreground/80">{item.quote}</p>
-                                            <div className="text-sm text-foreground/60">
-                                                <p className="font-semibold text-foreground/85">{item.author}</p>
-                                                {item.role && <p>{item.role}</p>}
+                        <div className="grid gap-6">
+                            {highlightTracks.map((track) => {
+                                const Icon = track.icon;
+                                return (
+                                    <div
+                                        key={track.title}
+                                        className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors"
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-12 h-12 border border-foreground/20 flex items-center justify-center flex-shrink-0">
+                                                <Icon className="h-6 w-6" />
                                             </div>
-                                            {index < testimonialCount - 1 && (
-                                                <div className="h-px w-full bg-foreground/12" />
-                                            )}
+                                            <div className="space-y-2">
+                                                <h3 className="text-xl font-semibold">{track.title}</h3>
+                                                <p className="text-sm leading-relaxed text-foreground/70">
+                                                    {track.description}
+                                                </p>
+                                            </div>
                                         </div>
-                                    ))}
-
-                                {!testimonialsLoading && testimonialsError && (
-                                    <p className="text-sm text-destructive">{testimonialsError}</p>
-                                )}
-                            </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section className="py-24">
-                <div className="max-w-6xl mx-auto px-6 lg:px-8">
-                    <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-                        <div className="rounded-3xl border border-foreground/12 bg-background/80 p-10 backdrop-blur">
-                            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Momentum we cultivate</p>
-                            <h2 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">
-                                Growth anchored in collaborative experimentation ra thukka maja
-                            </h2>
-                            <p className="mt-6 text-base leading-relaxed text-foreground/70">
-                                Sprint gara hamro sanga: measurable impact + banter + bonus playlists. New markets explore gara, digital services scale gara, ya immersive experiences prototype gara—sabai ma hamro vibes constant.
-                            </p>
-                            <div className="mt-10 grid grid-cols-2 gap-4 text-sm">
-                                <div className="rounded-2xl border border-foreground/12 p-6">
-                                    <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Mentors onboard</p>
-                                    <p className="mt-3 text-2xl font-semibold">110</p>
-                                </div>
-                                <div className="rounded-2xl border border-foreground/12 p-6">
-                                    <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Global pilots</p>
-                                    <p className="mt-3 text-2xl font-semibold">72</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid gap-6 sm:grid-cols-2">
-                            {achievementStats.map((stat) => {
-                                const Icon = stat.icon;
-                                return (
-                                    <div
-                                        key={stat.label}
-                                        className="flex flex-col items-center gap-3 rounded-3xl border border-foreground/12 bg-background/75 p-8 text-center backdrop-blur"
-                                    >
-                                        <Icon className="h-6 w-6 text-primary" />
-                                        <span className="text-3xl font-semibold">{stat.value}</span>
-                                        <span className="text-xs uppercase tracking-[0.35em] text-foreground/55">{stat.label}</span>
+            <section className="py-32 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="space-y-4 mb-16">
+                        <p className="text-xs uppercase tracking-widest text-foreground/50">What People Say</p>
+                        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Testimonials</h2>
+                    </div>
+
+                    {testimonialsLoading && (
+                        <div className="text-center text-foreground/60 py-12">Loading testimonials...</div>
+                    )}
+
+                    {testimonialsError && (
+                        <p className="text-sm text-destructive border border-destructive/20 p-4 mb-8">
+                            {testimonialsError}
+                        </p>
+                    )}
+
+                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        {!testimonialsLoading &&
+                            displayTestimonials.map((item: any) => (
+                                <div
+                                    key={item.key}
+                                    className="border border-foreground/10 p-8 space-y-6 hover:border-foreground/30 transition-colors"
+                                >
+                                    <p className="text-base leading-relaxed text-foreground/80">
+                                        "{item.quote}"
+                                    </p>
+                                    <div className="pt-4 border-t border-foreground/10 flex items-center gap-4">
+                                        {item.image ? (
+                                            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden border border-foreground/20">
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.author}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="48px"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="h-12 w-12 flex-shrink-0 border border-foreground/20 flex items-center justify-center bg-foreground/5">
+                                                <span className="text-sm font-semibold text-foreground/60">
+                                                    {item.author.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                        )}
+                                        <div>
+                                            <p className="font-semibold text-foreground/90">{item.author}</p>
+                                            {item.role && (
+                                                <p className="text-sm text-foreground/60 mt-1">{item.role}</p>
+                                            )}
+                                        </div>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-32">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="border border-foreground/10 p-16 lg:p-24">
+                        <div className="max-w-3xl mx-auto text-center space-y-8">
+                            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                                Ready to Innovate?
+                            </h2>
+                            <p className="text-xl leading-relaxed text-foreground/70">
+                                Join the Innovation Lab and transform your ideas into reality. Whether you're a student, researcher, or entrepreneur, we provide the tools and community you need to succeed.
+                            </p>
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                                <Button size="lg" className="px-8 text-sm uppercase tracking-wider">
+                                    Get Started
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="px-8 text-sm uppercase tracking-wider"
+                                    asChild
+                                >
+                                    <Link href="/about">Learn More About Us</Link>
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
