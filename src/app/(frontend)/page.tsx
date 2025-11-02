@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
     ArrowUpRight,
@@ -14,17 +16,24 @@ import {
     Users,
     Zap,
 } from "lucide-react";
-import Image from "next/image";
+
 import { HttpError } from "@/lib/http/api-client";
 import { listTestimonials } from "@/lib/http/testimonials";
+import { listNews } from "@/lib/http/news";
+import { listEvents } from "@/lib/http/events";
+import { normalizeLexicalState, estimateReadingTime } from "@/lib/editor/lexical-utils";
 import { type TestimonialRecord } from "@/lib/types/testimonials";
+import { type NewsRecord } from "@/lib/types/news";
+import { type EventRecord } from "@/lib/types/events";
 
 interface NewsItem {
-    image: string;
+    image: string | null;
     category: string;
     date: string;
     title: string;
     description: string;
+    href: string;
+    readTime: string;
 }
 
 interface EventItem {
@@ -37,7 +46,13 @@ interface EventItem {
     link: string;
 }
 
-const newsItems: NewsItem[] = [
+interface FallbackTestimonial {
+    quote: string;
+    author: string;
+    role: string;
+}
+
+const FALLBACK_NEWS: NewsItem[] = [
     {
         image:
             "https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?auto=format&fit=crop&w=1200&q=80",
@@ -46,6 +61,8 @@ const newsItems: NewsItem[] = [
         title: "Robot haru le momo banaunda laptop pani royo",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget ligula sit amet sem tincidunt auctor.",
+        href: "#",
+        readTime: "3 min read",
     },
     {
         image:
@@ -55,6 +72,8 @@ const newsItems: NewsItem[] = [
         title: "Community meetup ma free sel roti, say no more",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget ligula sit amet sem tincidunt auctor.",
+        href: "#",
+        readTime: "2 min read",
     },
     {
         image:
@@ -64,10 +83,12 @@ const newsItems: NewsItem[] = [
         title: "Tihar lights le sensors confuse, data pani chillax",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget ligula sit amet sem tincidunt auctor.",
+        href: "#",
+        readTime: "4 min read",
     },
 ];
 
-const eventItems: EventItem[] = [
+const FALLBACK_EVENTS: EventItem[] = [
     {
         date: "Nov 12, 2025",
         time: "10:00 AM – 5:00 PM",
@@ -99,12 +120,6 @@ const eventItems: EventItem[] = [
         link: "#",
     },
 ];
-
-interface FallbackTestimonial {
-    quote: string;
-    author: string;
-    role: string;
-}
 
 const FALLBACK_TESTIMONIALS: FallbackTestimonial[] = [
     {
@@ -176,10 +191,240 @@ const achievementStats = [
     { value: "25", label: "Awards & honours", icon: Trophy },
 ];
 
+function safeText(value: string | null | undefined) {
+    return value?.trim() ?? "";
+}
+
+function safeUrl(value: string | null | undefined) {
+    const normalized = safeText(value);
+    return normalized ? normalized : null;
+}
+
+function truncateText(value: string, limit: number) {
+    if (!value) {
+        return value;
+    }
+
+    if (value.length <= limit) {
+        return value;
+    }
+
+    return `${value.slice(0, Math.max(0, limit - 3)).trimEnd()}...`;
+}
+
+function formatNewsDate(record: NewsRecord) {
+    const source = record.publishedAt ?? record.createdAt;
+    const date = new Date(source);
+
+    if (Number.isNaN(date.getTime())) {
+        return "Publication date coming soon";
+    }
+
+    return date.toLocaleDateString(undefined, {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+    });
+}
+
+function resolveNewsCategory(record: NewsRecord) {
+    const role = safeText(record.author?.role ?? null);
+
+    if (role) {
+        return role;
+    }
+
+    const name = safeText(record.author?.name ?? null);
+
+    if (name) {
+        return name;
+    }
+
+    const email = safeText(record.author?.email ?? null);
+    return email || "Innovation Lab";
+}
+
+function sortNewsRecords(records: NewsRecord[]) {
+    return [...records].sort((a, b) => {
+        const aTime = Date.parse(a.publishedAt ?? a.createdAt);
+        const bTime = Date.parse(b.publishedAt ?? b.createdAt);
+        const safeATime = Number.isNaN(aTime) ? 0 : aTime;
+        const safeBTime = Number.isNaN(bTime) ? 0 : bTime;
+
+        return safeBTime - safeATime;
+    });
+}
+
+function mapNewsRecord(record: NewsRecord): NewsItem {
+    const normalized = normalizeLexicalState(record.content);
+    const excerptSource = safeText(record.excerpt) || (normalized.paragraphs[0] ?? "");
+    const excerpt = excerptSource || "More details arriving soon.";
+    const plainText = normalized.plainText || excerpt;
+
+    return {
+        image: safeUrl(record.coverImageUrl),
+        category: resolveNewsCategory(record),
+        date: formatNewsDate(record),
+        title: record.title,
+        description: truncateText(excerpt, 180),
+        href: `/news/${record.slug}`,
+        readTime: estimateReadingTime(plainText),
+    };
+}
+
+function getEventStartTimestamp(event: EventRecord) {
+    const value = Date.parse(event.startsAt);
+    return Number.isNaN(value) ? Number.POSITIVE_INFINITY : value;
+}
+
+function pickHomepageEvents(records: EventRecord[]) {
+    if (records.length === 0) {
+        return [] as EventRecord[];
+    }
+
+    const sorted = [...records].sort((a, b) => getEventStartTimestamp(a) - getEventStartTimestamp(b));
+    const now = Date.now();
+
+    const upcoming = sorted.filter((event) => {
+        const start = Date.parse(event.startsAt);
+
+        if (!Number.isNaN(start) && start >= now) {
+            return true;
+        }
+
+        if (!event.endsAt) {
+            return false;
+        }
+
+        const end = Date.parse(event.endsAt);
+        return !Number.isNaN(end) && end >= now;
+    });
+
+    const selection: EventRecord[] = [];
+
+    for (const event of upcoming) {
+        if (selection.length >= 3) {
+            break;
+        }
+        selection.push(event);
+    }
+
+    for (const event of sorted) {
+        if (selection.length >= 3) {
+            break;
+        }
+
+        if (selection.some((existing) => existing.id === event.id)) {
+            continue;
+        }
+
+        selection.push(event);
+    }
+
+    return selection;
+}
+
+function formatEventSchedule(event: EventRecord) {
+    const start = new Date(event.startsAt);
+
+    if (Number.isNaN(start.getTime())) {
+        return { date: "Date coming soon", time: "Time to be announced" };
+    }
+
+    const date = start.toLocaleDateString(undefined, {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+    });
+
+    const startTime = start.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+    });
+
+    if (!event.endsAt) {
+        return { date, time: startTime };
+    }
+
+    const end = new Date(event.endsAt);
+
+    if (Number.isNaN(end.getTime())) {
+        return { date, time: startTime };
+    }
+
+    const endTime = end.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+    });
+
+    return {
+        date,
+        time: `${startTime} – ${endTime}`,
+    };
+}
+
+function resolveEventCategory(event: EventRecord) {
+    const organizerName = safeText(event.organizer?.name ?? null);
+
+    if (organizerName) {
+        return organizerName;
+    }
+
+    const organizerEmail = safeText(event.organizer?.email ?? null);
+
+    if (organizerEmail) {
+        return organizerEmail;
+    }
+
+    return event.isVirtual ? "Virtual session" : "In-person";
+}
+
+function resolveEventLocation(event: EventRecord) {
+    if (event.isVirtual) {
+        return "Remote";
+    }
+
+    const location = safeText(event.location);
+    return location || "Location to be announced";
+}
+
+function resolveEventDescription(event: EventRecord) {
+    const summary = safeText(event.summary);
+
+    if (summary) {
+        return summary;
+    }
+
+    const description = safeText(event.description);
+    return description || "Further details coming soon.";
+}
+
+function mapEventRecord(event: EventRecord): EventItem {
+    const schedule = formatEventSchedule(event);
+
+    return {
+        date: schedule.date,
+        time: schedule.time,
+        title: event.title,
+        category: resolveEventCategory(event),
+        description: truncateText(resolveEventDescription(event), 160),
+        location: resolveEventLocation(event),
+        link: `/events/${event.slug}`,
+    };
+}
+
 export default function Frontend() {
     const [testimonials, setTestimonials] = useState<TestimonialRecord[]>([]);
     const [testimonialsLoading, setTestimonialsLoading] = useState(true);
     const [testimonialsError, setTestimonialsError] = useState<string | null>(null);
+    const [newsCards, setNewsCards] = useState<NewsItem[]>(FALLBACK_NEWS);
+    const [newsLoading, setNewsLoading] = useState(true);
+    const [newsError, setNewsError] = useState<string | null>(null);
+    const [newsFromApi, setNewsFromApi] = useState(false);
+    const [eventCards, setEventCards] = useState<EventItem[]>(FALLBACK_EVENTS);
+    const [eventsLoading, setEventsLoading] = useState(true);
+    const [eventsError, setEventsError] = useState<string | null>(null);
+    const [eventsFromApi, setEventsFromApi] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -216,7 +461,84 @@ export default function Frontend() {
             }
         };
 
+        const fetchNews = async () => {
+            setNewsLoading(true);
+
+            try {
+                const dataset = await listNews({ status: "published", limit: 6 });
+
+                if (cancelled) {
+                    return;
+                }
+
+                const sorted = sortNewsRecords(dataset);
+                const selected = sorted.slice(0, 3);
+
+                if (selected.length > 0) {
+                    setNewsCards(selected.map(mapNewsRecord));
+                    setNewsFromApi(true);
+                    setNewsError(null);
+                } else {
+                    setNewsCards(FALLBACK_NEWS);
+                    setNewsFromApi(false);
+                    setNewsError(null);
+                }
+            } catch (error) {
+                if (cancelled) {
+                    return;
+                }
+
+                const message = error instanceof HttpError ? error.message : "Unable to load news";
+                setNewsError(message);
+                setNewsCards(FALLBACK_NEWS);
+                setNewsFromApi(false);
+            } finally {
+                if (!cancelled) {
+                    setNewsLoading(false);
+                }
+            }
+        };
+
+        const fetchEvents = async () => {
+            setEventsLoading(true);
+
+            try {
+                const dataset = await listEvents({ status: "published", limit: 12 });
+
+                if (cancelled) {
+                    return;
+                }
+
+                const selected = pickHomepageEvents(dataset);
+
+                if (selected.length > 0) {
+                    setEventCards(selected.map(mapEventRecord));
+                    setEventsFromApi(true);
+                    setEventsError(null);
+                } else {
+                    setEventCards(FALLBACK_EVENTS);
+                    setEventsFromApi(false);
+                    setEventsError(null);
+                }
+            } catch (error) {
+                if (cancelled) {
+                    return;
+                }
+
+                const message = error instanceof HttpError ? error.message : "Unable to load events";
+                setEventsError(message);
+                setEventCards(FALLBACK_EVENTS);
+                setEventsFromApi(false);
+            } finally {
+                if (!cancelled) {
+                    setEventsLoading(false);
+                }
+            }
+        };
+
         void fetchTestimonials();
+        void fetchNews();
+        void fetchEvents();
 
         return () => {
             cancelled = true;
@@ -239,6 +561,10 @@ export default function Frontend() {
               }));
 
     const testimonialCount = displayTestimonials.length;
+    const primaryNews = newsCards[0] ?? null;
+    const secondaryNews = primaryNews ? newsCards.slice(1) : [];
+    const showNewsArchiveNotice = !newsError && !newsLoading && !newsFromApi;
+    const showEventsArchiveNotice = !eventsError && !eventsLoading && !eventsFromApi;
 
     return (
         <main className="w-full bg-background text-foreground">
@@ -341,55 +667,116 @@ export default function Frontend() {
                             <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Stories in motion</p>
                             <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">News &amp; gossip worth screenshot</h2>
                         </div>
-                        <Button className="h-12 w-12 rounded-full shadow-none" variant="outline">
-                            <ArrowUpRight className="h-5 w-5" />
+                        <Button className="h-12 w-12 rounded-full shadow-none" variant="outline" asChild>
+                            <Link href="/news" aria-label="Browse all news">
+                                <ArrowUpRight className="h-5 w-5" />
+                            </Link>
                         </Button>
                     </div>
+                    {newsError && (
+                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-destructive">
+                            {newsError}. Showing our crowd favorite archive for now.
+                        </p>
+                    )}
+                    {showNewsArchiveNotice && (
+                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-foreground/60">
+                            Fresh dispatches brewing. Until then, enjoy some classic lab headlines.
+                        </p>
+                    )}
                     <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                        <article className="group relative overflow-hidden rounded-3xl border border-foreground/12 bg-background/90 backdrop-blur">
-                            <div className="relative h-72 w-full">
-                                <Image
-                                    src={newsItems[0].image}
-                                    alt={newsItems[0].title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 1024px) 100vw, 50vw"
-                                />
-                            </div>
-                            <div className="space-y-5 p-10">
-                                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                    <span>{newsItems[0].category}</span>
-                                    <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                    <span>{newsItems[0].date}</span>
+                        {primaryNews ? (
+                            <article className="group relative overflow-hidden rounded-3xl border border-foreground/12 bg-background/90 backdrop-blur">
+                                <div className="relative h-72 w-full">
+                                    {primaryNews.image ? (
+                                        <Image
+                                            src={primaryNews.image}
+                                            alt={primaryNews.title}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            sizes="(max-width: 1024px) 100vw, 50vw"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,theme(colors.primary)/24%,transparent_70%)]" />
+                                    )}
                                 </div>
-                                <h3 className="text-2xl font-semibold text-foreground/90">{newsItems[0].title}</h3>
-                                <p className="text-sm leading-relaxed text-foreground/65">{newsItems[0].description}</p>
-                                <Button variant="ghost" className="rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                                    La read gara
-                                </Button>
-                            </div>
-                        </article>
-                        <div className="grid gap-6">
-                            {newsItems.slice(1).map((item) => (
-                                <article
-                                    key={item.title}
-                                    className="group flex flex-col rounded-3xl border border-foreground/12 bg-background/80 p-8 backdrop-blur"
-                                >
-                                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
-                                        <span>{item.category}</span>
+                                <div className="space-y-5 p-10">
+                                    <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
+                                        <span>{primaryNews.category}</span>
                                         <span className="h-1 w-1 rounded-full bg-foreground/40" />
-                                        <span>{item.date}</span>
+                                        <span>{primaryNews.date}</span>
+                                        <span className="h-1 w-1 rounded-full bg-foreground/40" />
+                                        <span>{primaryNews.readTime}</span>
                                     </div>
-                                    <h3 className="mt-4 text-xl font-semibold text-foreground/90">{item.title}</h3>
-                                    <p className="mt-3 text-sm leading-relaxed text-foreground/65">{item.description}</p>
-                                    <Button
-                                        variant="ghost"
-                                        className="mt-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                    <h3 className="text-2xl font-semibold text-foreground/90">{primaryNews.title}</h3>
+                                    <p className="text-sm leading-relaxed text-foreground/65">{primaryNews.description}</p>
+                                    {primaryNews.href === "#" ? (
+                                        <Button
+                                            variant="ghost"
+                                            className="rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                            disabled
+                                        >
+                                            La read gara
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="ghost"
+                                            className="rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                            asChild
+                                        >
+                                            <Link href={primaryNews.href} aria-label={`Read ${primaryNews.title}`}>
+                                                La read gara
+                                            </Link>
+                                        </Button>
+                                    )}
+                                </div>
+                            </article>
+                        ) : (
+                            <div className="flex items-center justify-center rounded-3xl border border-foreground/12 bg-background/90 p-10 text-xs uppercase tracking-[0.3em] text-foreground/60">
+                                Stories coming soon.
+                            </div>
+                        )}
+                        <div className="grid gap-6">
+                            {secondaryNews.length === 0 ? (
+                                <div className="flex h-full items-center justify-center rounded-3xl border border-foreground/12 bg-background/80 p-8 text-center text-xs uppercase tracking-[0.3em] text-foreground/60">
+                                    More stories on the way.
+                                </div>
+                            ) : (
+                                secondaryNews.map((item, index) => (
+                                    <article
+                                        key={`${item.href}-${index}`}
+                                        className="group flex flex-col rounded-3xl border border-foreground/12 bg-background/80 p-8 backdrop-blur"
                                     >
-                                        La read gara
-                                    </Button>
-                                </article>
-                            ))}
+                                        <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-foreground/50">
+                                            <span>{item.category}</span>
+                                            <span className="h-1 w-1 rounded-full bg-foreground/40" />
+                                            <span>{item.date}</span>
+                                            <span className="h-1 w-1 rounded-full bg-foreground/40" />
+                                            <span>{item.readTime}</span>
+                                        </div>
+                                        <h3 className="mt-4 text-xl font-semibold text-foreground/90">{item.title}</h3>
+                                        <p className="mt-3 text-sm leading-relaxed text-foreground/65">{item.description}</p>
+                                        {item.href === "#" ? (
+                                            <Button
+                                                variant="ghost"
+                                                className="mt-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                                disabled
+                                            >
+                                                La read gara
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="ghost"
+                                                className="mt-auto w-fit rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                                asChild
+                                            >
+                                                <Link href={item.href} aria-label={`Read ${item.title}`}>
+                                                    La read gara
+                                                </Link>
+                                            </Button>
+                                        )}
+                                    </article>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
@@ -402,14 +789,24 @@ export default function Frontend() {
                             <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Next up</p>
                             <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">Events jaha laughter ra learning dubai</h2>
                         </div>
-                        <Button className="rounded-full px-6 py-3 text-xs uppercase tracking-[0.3em] shadow-none" variant="outline">
-                            Calendar hera na
+                        <Button className="rounded-full px-6 py-3 text-xs uppercase tracking-[0.3em] shadow-none" variant="outline" asChild>
+                            <Link href="/events">Calendar hera na</Link>
                         </Button>
                     </div>
+                    {eventsError && (
+                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-destructive">
+                            {eventsError}. Sharing our highlight reel meanwhile.
+                        </p>
+                    )}
+                    {showEventsArchiveNotice && (
+                        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-foreground/60">
+                            Fresh gatherings announcing soon. Till then, here are lab favorites.
+                        </p>
+                    )}
                     <div className="mt-14 grid gap-6 lg:grid-cols-3">
-                        {eventItems.map((event) => (
+                        {eventCards.map((event, index) => (
                             <article
-                                key={event.title}
+                                key={`${event.link}-${index}`}
                                 className="flex h-full flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/85 p-8 backdrop-blur"
                             >
                                 <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/50">
@@ -426,9 +823,25 @@ export default function Frontend() {
                                 </div>
                                 <div className="mt-auto flex items-center justify-between border-t border-foreground/15 pt-4 text-xs uppercase tracking-[0.3em] text-foreground/50">
                                     <span>{event.location}</span>
-                                    <Button variant="ghost" className="rounded-full px-3 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                                        Details chai?
-                                    </Button>
+                                    {event.link === "#" ? (
+                                        <Button
+                                            variant="ghost"
+                                            className="rounded-full px-3 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                            disabled
+                                        >
+                                            Details chai?
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="ghost"
+                                            className="rounded-full px-3 py-2 text-xs uppercase tracking-[0.3em] text-foreground/60"
+                                            asChild
+                                        >
+                                            <Link href={event.link} aria-label={`View details for ${event.title}`}>
+                                                Details chai?
+                                            </Link>
+                                        </Button>
+                                    )}
                                 </div>
                             </article>
                         ))}
