@@ -244,11 +244,11 @@ export default async function EventsPage() {
                 ) : (
                   <div className="absolute inset-0 bg-foreground/5" />
                 )}
-                <div className="absolute top-6 left-6">
+                {/* <div className="absolute top-6 left-6">
                   <div className="border border-foreground/20 bg-background/95 px-4 py-2">
                     <span className="text-xs font-medium uppercase tracking-wider text-foreground/60">Featured Event</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               
               <div className="border-t border-foreground/20 p-8 space-y-6">

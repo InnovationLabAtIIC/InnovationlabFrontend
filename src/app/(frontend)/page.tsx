@@ -974,23 +974,23 @@ export default function Frontend() {
 
             <section className="py-16">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="border border-foreground/10 p-16 lg:p-24">
+                    <div className="border border-foreground/10 py-16 px-4 lg:p-24">
                         <div className="max-w-3xl mx-auto text-center space-y-8">
                             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
                                 Ready to Innovate?
                             </h2>
-                            <p className="text-xl leading-relaxed text-foreground/70">
+                            <p className="text-md leading-relaxed text-foreground/70">
                                 Join the Innovation Lab and transform your ideas into reality. Whether you're a student, researcher, or entrepreneur, we provide the tools and community you need to succeed.
                             </p>
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                                <Button size="lg" className="px-8 text-sm uppercase tracking-wider">
+                                <Button size="lg" className="px-8 text-sm uppercase tracking-wider w-full md:w-auto">
                                     Get Started
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    className="px-8 text-sm uppercase tracking-wider"
+                                    className="px-8 w-full md:w-auto text-sm uppercase tracking-wider"
                                     asChild
                                 >
                                     <Link href="/about">Learn More About Us</Link>
