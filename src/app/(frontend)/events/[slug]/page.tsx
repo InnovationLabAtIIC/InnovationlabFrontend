@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -9,216 +11,223 @@ import {
   Users,
 } from "lucide-react";
 
-interface EventAgendaItem {
-  time: string;
-  title: string;
-  description: string;
+import { LexicalRenderer } from "@/components/blocks/editor-x/viewer";
+import { resolveApiBaseUrl } from "@/lib/http/resolve-api-base-url";
+import type { EventRecord } from "@/lib/types/events";
+
+export const revalidate = 60;
+
+interface EventsApiResponse {
+  data: EventRecord[];
 }
 
-interface EventDetail {
-  slug: string;
-  title: string;
-  category: string;
-  date: string;
-  time: string;
-  location: string;
-  summary: string;
-  description: string[];
-  focus: string[];
-  agenda: EventAgendaItem[];
-  speakers: { name: string; role: string }[];
-  next?: { title: string; slug: string };
+interface DescriptionContent {
+  lexicalState: string | null;
+  paragraphs: string[];
 }
 
-const events: EventDetail[] = [
-  {
-    slug: "design-futures-summit",
-  title: "Design Futures Summit: chiya meets chaos",
-    category: "Conference",
-    date: "Nov 12, 2025",
-    time: "10:00 AM – 5:00 PM",
-    location: "New York City, USA",
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim orci at vulputate volutpat.",
-    description: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-    ],
-    focus: ["Immersive Labs", "Responsible Tech", "Learning Futures"],
-    agenda: [
-      {
-        time: "10:00",
-        title: "Opening ritual (chiya cheers)",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "11:00",
-  title: "Signals & trends ma gossip",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "13:00",
-  title: "Prototype studios ko dhamaka",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "16:00",
-  title: "Commitment circle, halka bhayad", 
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-    ],
-    speakers: [
-      { name: "Amina Calderon", role: "Director, Speculative Futures Lab" },
-      { name: "Leo Ghosh", role: "Principal Designer, Resonance" },
-      { name: "Priya Chen", role: "Learning Strategist, Horizon Collective" },
-    ],
-  next: { title: "Creative Lab Workshop: figma bhanda funny", slug: "creative-lab-workshop" },
-  },
-  {
-    slug: "creative-lab-workshop",
-  title: "Creative Lab Workshop: figma bhanda funny",
-    category: "Workshop",
-    date: "Dec 05, 2025",
-    time: "9:00 AM – 3:00 PM",
-    location: "Berlin, Germany",
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim orci at vulputate volutpat.",
-    description: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-    ],
-    focus: ["Experience Mapping", "Low-code", "Community Insights"],
-    agenda: [
-      {
-        time: "09:00",
-        title: "Immersion circuit, dai chai ready",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "10:30",
-  title: "Concept weaving ra wisecracks",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "12:30",
-  title: "Prototype dash ma sprint",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "14:30",
-  title: "Showcase forum: clap clap",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-    ],
-    speakers: [
-      { name: "Maya Ruiz", role: "Innovation Coach, CoLab" },
-      { name: "Haruto Sato", role: "Experience Architect, Shift Studio" },
-      { name: "Elena Rossi", role: "Community Research Lead, OpenCity" },
-    ],
-  next: { title: "Innovation Expo: demo gara wow suna", slug: "innovation-expo" },
-  },
-  {
-    slug: "innovation-expo",
-  title: "Innovation Expo: demo gara wow suna",
-    category: "Exhibition",
-    date: "Jan 20, 2026",
-    time: "11:00 AM – 6:00 PM",
-    location: "Tokyo, Japan",
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim orci at vulputate volutpat.",
-    description: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-    ],
-    focus: ["Prototype Demos", "AI Tooling", "Global Partnerships"],
-    agenda: [
-      {
-        time: "11:00",
-        title: "Exhibit hall opens, selfie time",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "13:00",
-  title: "Founder fireside ko chit-chat",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "15:00",
-  title: "Demo theatre drama",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "17:00",
-  title: "Closing reflections + high-fives",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-    ],
-    speakers: [
-      { name: "Jonas Meyer", role: "Head of Ventures, Summit Labs" },
-      { name: "Sofia Laurent", role: "Product Lead, CivicStack" },
-      { name: "Dr. Layla Farouk", role: "Director, Inclusive AI Network" },
-    ],
-  next: { title: "Residency Showcase: cohort ko dhamaka", slug: "residency-showcase" },
-  },
-  {
-    slug: "residency-showcase",
-  title: "Residency Showcase: cohort ko dhamaka",
-    category: "Showcase",
-    date: "Feb 14, 2026",
-    time: "1:00 PM – 4:00 PM",
-    location: "Singapore",
-    summary:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim orci at vulputate volutpat.",
-    description: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed risus quis justo tempus elementum.",
-    ],
-    focus: ["Mentor Talks", "Cohort Stories", "Pilot Roadmaps"],
-    agenda: [
-      {
-        time: "13:00",
-        title: "Welcome circle ra warm vibes",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "13:30",
-  title: "Lightning showcases (wow wow)",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "15:00",
-  title: "Mentorship salons ko adda",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-      {
-        time: "16:00",
-  title: "Celebration & commitments, dance optional",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      },
-    ],
-    speakers: [
-      { name: "Ravi Yuen", role: "Residency Director, Innovation Lab" },
-      { name: "Sasha Bennett", role: "Community Partnerships Lead, Collective Commons" },
-      { name: "Nazanin Ortiz", role: "Mentor, Emerging Futures Guild" },
-    ],
-  next: { title: "Design Futures Summit: chiya meets chaos", slug: "design-futures-summit" },
-  },
-];
+function getEventTags(event: EventRecord) {
+  const tags = new Set<string>();
 
-export function generateStaticParams() {
-  return events.map((event) => ({ slug: event.slug }));
+  tags.add(event.isVirtual ? "Virtual session" : "In-person gathering");
+
+  if (event.organizer?.name) {
+    tags.add(event.organizer.name);
+  } else if (event.organizer?.email) {
+    tags.add(event.organizer.email);
+  }
+
+  if (event.registrationUrl) {
+    tags.add("Registration open");
+  }
+
+  return Array.from(tags);
+}
+
+function formatSchedule(event: EventRecord) {
+  const start = new Date(event.startsAt);
+
+  if (Number.isNaN(start.getTime())) {
+    return { date: "Date coming soon", time: "Time to be announced" };
+  }
+
+  const date = start.toLocaleDateString(undefined, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+
+  const startTime = start.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  if (!event.endsAt) {
+    return { date, time: startTime };
+  }
+
+  const end = new Date(event.endsAt);
+
+  if (Number.isNaN(end.getTime())) {
+    return { date, time: startTime };
+  }
+
+  const endTime = end.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  return {
+    date,
+    time: `${startTime} – ${endTime}`,
+  };
+}
+
+function getLocationLabel(event: EventRecord) {
+  if (event.isVirtual) {
+    return "Remote";
+  }
+
+  if (event.location && event.location.trim()) {
+    return event.location.trim();
+  }
+
+  return "Location to be announced";
+}
+
+function resolveDescriptionContent(description: string | null): DescriptionContent {
+  const empty: DescriptionContent = { lexicalState: null, paragraphs: [] };
+
+  if (!description) {
+    return empty;
+  }
+
+  const trimmed = description.trim();
+
+  if (!trimmed) {
+    return empty;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed) as {
+      root?: {
+        children?: Array<{
+          text?: string;
+          children?: unknown[];
+        }>;
+      };
+    };
+
+    if (!parsed?.root) {
+  return { lexicalState: null, paragraphs: [trimmed] };
+    }
+
+    const gather = (node: any): string => {
+      if (!node) {
+        return "";
+      }
+
+      if (typeof node.text === "string") {
+        return node.text;
+      }
+
+      if (Array.isArray(node.children)) {
+        return node.children.map(gather).join("");
+      }
+
+      return "";
+    };
+
+    const paragraphs = Array.isArray(parsed.root.children)
+      ? parsed.root.children.map(child => gather(child).trim()).filter(Boolean)
+      : [];
+
+    return { lexicalState: trimmed, paragraphs };
+  } catch (_error) {
+    return { lexicalState: null, paragraphs: [trimmed] };
+  }
+}
+
+async function fetchEventBySlug(slug: string): Promise<EventRecord | null> {
+  const baseUrl = resolveApiBaseUrl();
+  const url = new URL("/api/events", baseUrl);
+  url.searchParams.set("slug", slug);
+  url.searchParams.set("limit", "1");
+
+  const response = await fetch(url.toString(), {
+    next: { revalidate },
+    cache: "force-cache",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to load event: ${response.status} ${response.statusText}`);
+  }
+
+  const payload = (await response.json()) as EventsApiResponse;
+  return payload.data[0] ?? null;
+}
+
+export async function generateStaticParams() {
+  try {
+    const baseUrl = resolveApiBaseUrl();
+    const url = new URL("/api/events", baseUrl);
+    url.searchParams.set("status", "published");
+    url.searchParams.set("limit", "50");
+
+    const response = await fetch(url.toString(), {
+      next: { revalidate },
+      cache: "force-cache",
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = (await response.json()) as EventsApiResponse;
+    return payload.data.map(event => ({ slug: event.slug }));
+  } catch (_error) {
+    return [];
+  }
 }
 
 interface EventDetailPageProps {
   params: { slug: string };
 }
 
-export default function EventDetailPage({ params }: EventDetailPageProps) {
-  const event = events.find((item) => item.slug === params.slug);
+export async function generateMetadata({ params }: EventDetailPageProps): Promise<Metadata> {
+  const event = await fetchEventBySlug(params.slug.toLowerCase());
+
+  if (!event) {
+    return {
+      title: "Event not found — Innovation Lab",
+      description: "The event you were looking for could not be found.",
+    };
+  }
+
+  return {
+    title: `${event.title} — Innovation Lab`,
+    description: event.summary ?? `Discover ${event.title} hosted by Innovation Lab.`,
+    openGraph: {
+      title: `${event.title} — Innovation Lab`,
+      description: event.summary ?? undefined,
+      images: event.image ? [{ url: event.image }] : undefined,
+    },
+  };
+}
+
+export default async function EventDetailPage({ params }: EventDetailPageProps) {
+  const normalizedSlug = params.slug.toLowerCase();
+  const event = await fetchEventBySlug(normalizedSlug);
 
   if (!event) {
     notFound();
   }
+
+  const schedule = formatSchedule(event);
+  const tags = getEventTags(event);
+  const locationLabel = getLocationLabel(event);
+  const descriptionContent = resolveDescriptionContent(event.description);
+  const imageUrl = event.image && event.image.trim() ? event.image.trim() : null;
 
   return (
     <main className="w-full bg-background text-foreground">
@@ -233,75 +242,111 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
               <ArrowLeft className="h-4 w-4" />
               Back to events
             </Link>
-            <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-foreground/50">
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                <CalendarDays className="h-3.5 w-3.5" />
-                {event.date}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                <Clock className="h-3.5 w-3.5" />
-                {event.time}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
-                <MapPin className="h-3.5 w-3.5" />
-                {event.location}
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight">{event.title}</h1>
-            <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.35em] text-foreground/55">
-              {event.focus.map((focus) => (
-                <span key={focus} className="rounded-full border border-foreground/15 px-4 py-2">
-                  {focus}
-                </span>
-              ))}
+
+            <div className="relative overflow-hidden rounded-3xl border border-foreground/12 bg-background/90">
+              <div className="relative h-64 w-full">
+                {imageUrl ? (
+                  <Image
+                    src={imageUrl}
+                    alt={event.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                    priority
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,theme(colors.primary)/24%,transparent_70%)]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/10" />
+              </div>
+              <div className="flex flex-col gap-4 p-8">
+                <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-foreground/55">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
+                    <CalendarDays className="h-3.5 w-3.5" />
+                    {schedule.date}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
+                    <Clock className="h-3.5 w-3.5" />
+                    {schedule.time}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {locationLabel}
+                  </span>
+                </div>
+                <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-foreground/95">{event.title}</h1>
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.35em] text-foreground/60">
+                    {tags.map(tag => (
+                      <span key={tag} className="rounded-full border border-foreground/15 px-4 py-2">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="pb-20">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <p className="text-base leading-relaxed text-foreground/70">{event.summary}</p>
+          {event.summary && (<p className="text-base leading-relaxed text-foreground/70">{event.summary}</p>
+          )}
 
-          <div className="mt-10 space-y-6 text-base leading-relaxed text-foreground/70">
-            {event.description.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
-
-          <div className="mt-16 rounded-3xl border border-foreground/12 bg-background/85 p-10 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Agenda</p>
-            <div className="mt-8 space-y-6">
-              {event.agenda.map((item) => (
-                <div key={item.time} className="flex flex-col gap-2 rounded-2xl border border-foreground/12 bg-background/80 p-6">
-                  <span className="text-xs uppercase tracking-[0.35em] text-foreground/55">{item.time}</span>
-                  <p className="text-lg font-semibold text-foreground/90">{item.title}</p>
-                  <p className="text-sm leading-relaxed text-foreground/70">{item.description}</p>
-                </div>
+          {descriptionContent.lexicalState ? (
+            <div className="mt-10">
+              <LexicalRenderer
+                state={descriptionContent.lexicalState}
+                contentClassName="space-y-6 text-base leading-relaxed text-foreground/70 [&_strong]:text-foreground [&_em]:italic"
+              />
+            </div>
+          ) : descriptionContent.paragraphs.length > 0 ? (
+            <div className="mt-10 space-y-6 text-base leading-relaxed text-foreground/70">
+              {descriptionContent.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
               ))}
+            </div>
+          ) : null}
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            <div className="rounded-3xl border border-foreground/12 bg-background/85 p-6 backdrop-blur">
+              <p className="text-xs uppercase tracking-[0.35em] text-foreground/55">Schedule</p>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/75">
+                <span className="inline-flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4" />
+                  {schedule.date}
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  {schedule.time}
+                </span>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-foreground/12 bg-background/85 p-6 backdrop-blur">
+              <p className="text-xs uppercase tracking-[0.35em] text-foreground/55">Hosted by</p>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/75">
+                <span className="inline-flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  {event.organizer?.name ?? event.organizer?.email ?? "Innovation Lab"}
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  {locationLabel}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="mt-16 rounded-3xl border border-foreground/12 bg-background/85 p-10 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Featured mentors</p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {event.speakers.map((speaker) => (
-                <div key={speaker.name} className="rounded-2xl border border-foreground/12 bg-background/80 p-6">
-                  <p className="text-sm font-semibold text-foreground/85">{speaker.name}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-foreground/55">{speaker.role}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {event.next && (
-            <div className="mt-20 flex flex-col gap-6 rounded-3xl border border-foreground/12 bg-background/90 p-10 backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.35em] text-foreground/50">Next in the series</p>
+          {event.registrationUrl && (
+            <div className="mt-12 flex justify-center">
               <Link
-                href={`/events/${event.next.slug}`}
-                className="inline-flex items-center gap-3 text-sm uppercase tracking-[0.35em] text-foreground/65 transition-colors hover:text-foreground/90"
+                href={event.registrationUrl}
+                className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3 text-xs uppercase tracking-[0.35em] text-foreground/70 transition-colors hover:text-foreground/90"
               >
-                {event.next.title}
+                Reserve your spot
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>

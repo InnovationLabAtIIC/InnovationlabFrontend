@@ -53,9 +53,9 @@ import {
 
 interface FormState {
   headline: string;
-  body: string;
-  authorName: string;
-  authorTitle: string;
+  quote: string;
+  author: string;
+  role: string;
   company: string;
   avatarUrl: string;
   isFeatured: boolean;
@@ -64,9 +64,9 @@ interface FormState {
 
 const emptyForm: FormState = {
   headline: "",
-  body: "",
-  authorName: "",
-  authorTitle: "",
+  quote: "",
+  author: "",
+  role: "",
   company: "",
   avatarUrl: "",
   isFeatured: false,
@@ -76,9 +76,9 @@ const emptyForm: FormState = {
 function toFormState(record: TestimonialRecord): FormState {
   return {
     headline: record.headline ?? "",
-    body: record.body,
-    authorName: record.authorName,
-    authorTitle: record.authorTitle ?? "",
+    quote: record.quote,
+    author: record.author,
+    role: record.role ?? "",
     company: record.company ?? "",
     avatarUrl: record.avatarUrl ?? "",
     isFeatured: record.isFeatured,
@@ -205,7 +205,7 @@ export default function TestimonialsDashboard() {
   };
 
   const handleDelete = async (record: TestimonialRecord) => {
-    const confirmed = window.confirm(`Delete testimonial from ${record.authorName}?`);
+    const confirmed = window.confirm(`Delete testimonial from ${record.author}?`);
 
     if (!confirmed) {
       return;
@@ -227,7 +227,7 @@ export default function TestimonialsDashboard() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!formState.authorName.trim() || !formState.body.trim()) {
+    if (!formState.author.trim() || !formState.quote.trim()) {
       setFormError("Author name and testimonial body are required.");
       return;
     }
@@ -236,9 +236,9 @@ export default function TestimonialsDashboard() {
 
     const payload = {
       headline: nullIfEmpty(formState.headline),
-      body: formState.body.trim(),
-      authorName: formState.authorName.trim(),
-      authorTitle: nullIfEmpty(formState.authorTitle),
+      body: formState.quote.trim(),
+      authorName: formState.author.trim(),
+      authorTitle: nullIfEmpty(formState.role),
       company: nullIfEmpty(formState.company),
       avatarUrl: nullIfEmpty(formState.avatarUrl),
       isFeatured: formState.isFeatured,
@@ -348,7 +348,7 @@ export default function TestimonialsDashboard() {
             <DialogDescription>
               {dialogMode === "create"
                 ? "Capture a new testimonial from a customer or learner."
-                : `Update the testimonial from ${activeTestimonial?.authorName ?? ""}.`}
+                : `Update the testimonial from ${activeTestimonial?.author ?? ""}.`}
             </DialogDescription>
           </DialogHeader>
 
@@ -358,9 +358,9 @@ export default function TestimonialsDashboard() {
                 <Label htmlFor="author-name">Author name</Label>
                 <Input
                   id="author-name"
-                  value={formState.authorName}
+                  value={formState.author}
                   onChange={(event) =>
-                    setFormState((prev) => ({ ...prev, authorName: event.target.value }))
+                    setFormState((prev) => ({ ...prev, author: event.target.value }))
                   }
                   required
                 />
@@ -368,12 +368,12 @@ export default function TestimonialsDashboard() {
 
               <div className="grid gap-2 md:grid-cols-2 md:gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="author-title">Author title</Label>
+                  <Label htmlFor="author-title">Author role / title</Label>
                   <Input
                     id="author-title"
-                    value={formState.authorTitle}
+                    value={formState.role}
                     onChange={(event) =>
-                      setFormState((prev) => ({ ...prev, authorTitle: event.target.value }))
+                      setFormState((prev) => ({ ...prev, role: event.target.value }))
                     }
                   />
                 </div>
@@ -405,9 +405,9 @@ export default function TestimonialsDashboard() {
                 <Label htmlFor="body">Testimonial</Label>
                 <Textarea
                   id="body"
-                  value={formState.body}
+                  value={formState.quote}
                   onChange={(event) =>
-                    setFormState((prev) => ({ ...prev, body: event.target.value }))
+                    setFormState((prev) => ({ ...prev, quote: event.target.value }))
                   }
                   required
                   rows={5}
@@ -533,14 +533,14 @@ function TestimonialsTable({ data, isLoading, deletingId, onEdit, onDelete }: Ta
                 <TableCell className="min-w-[220px]">
                   <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarImage src={item.avatarUrl ?? undefined} alt={item.authorName} />
-                      <AvatarFallback>{getInitials(item.authorName)}</AvatarFallback>
+                      <AvatarImage src={item.avatarUrl ?? undefined} alt={item.author} />
+                      <AvatarFallback>{getInitials(item.author)}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col gap-0.5">
-                      <span className="font-medium leading-none">{item.authorName}</span>
-                      {(item.authorTitle || item.company) && (
+                      <span className="font-medium leading-none">{item.author}</span>
+                      {(item.role || item.company) && (
                         <span className="text-xs text-muted-foreground">
-                          {[item.authorTitle, item.company].filter(Boolean).join(" · ")}
+                          {[item.role, item.company].filter(Boolean).join(" · ")}
                         </span>
                       )}
                     </div>
@@ -551,7 +551,7 @@ function TestimonialsTable({ data, isLoading, deletingId, onEdit, onDelete }: Ta
                     <p className="font-medium leading-tight">
                       {item.headline ? item.headline : "Untitled testimonial"}
                     </p>
-                    <p className="line-clamp-2 text-sm text-muted-foreground">{item.body}</p>
+                    <p className="line-clamp-2 text-sm text-muted-foreground">{item.quote}</p>
                     {item.isFeatured && <Badge variant="secondary">Featured</Badge>}
                   </div>
                 </TableCell>

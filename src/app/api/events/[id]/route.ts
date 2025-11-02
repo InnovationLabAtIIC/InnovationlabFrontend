@@ -101,6 +101,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       updates.registrationUrl = payload.registrationUrl?.trim() ?? null;
     }
 
+    if (payload.image !== undefined) {
+      updates.image = payload.image ? payload.image.trim() : null;
+    }
+
     if (payload.isVirtual !== undefined) {
       updates.isVirtual = payload.isVirtual;
     }

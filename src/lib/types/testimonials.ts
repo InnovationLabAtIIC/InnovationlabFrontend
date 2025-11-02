@@ -9,9 +9,9 @@ export type TestimonialStatus = (typeof TESTIMONIAL_STATUSES)[number];
 export interface TestimonialRecord {
   id: number;
   headline: string | null;
-  body: string;
-  authorName: string;
-  authorTitle: string | null;
+  quote: string;
+  author: string;
+  role: string | null;
   company: string | null;
   avatarUrl: string | null;
   isFeatured: boolean;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     ArrowUpRight,
@@ -14,6 +15,9 @@ import {
     Zap,
 } from "lucide-react";
 import Image from "next/image";
+import { HttpError } from "@/lib/http/api-client";
+import { listTestimonials } from "@/lib/http/testimonials";
+import { type TestimonialRecord } from "@/lib/types/testimonials";
 
 interface NewsItem {
     image: string;
@@ -31,12 +35,6 @@ interface EventItem {
     description: string;
     location: string;
     link: string;
-}
-
-interface Testimonial {
-    quote: string;
-    author: string;
-    role: string;
 }
 
 const newsItems: NewsItem[] = [
@@ -102,7 +100,13 @@ const eventItems: EventItem[] = [
     },
 ];
 
-const testimonials: Testimonial[] = [
+interface FallbackTestimonial {
+    quote: string;
+    author: string;
+    role: string;
+}
+
+const FALLBACK_TESTIMONIALS: FallbackTestimonial[] = [
     {
         quote:
             "Morning standup ma punchline diyera sabai lai jagaaunu parcha. Yo team le deadline lai pani comedian banaucha, believe me.",
@@ -173,6 +177,69 @@ const achievementStats = [
 ];
 
 export default function Frontend() {
+    const [testimonials, setTestimonials] = useState<TestimonialRecord[]>([]);
+    const [testimonialsLoading, setTestimonialsLoading] = useState(true);
+    const [testimonialsError, setTestimonialsError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const fetchTestimonials = async () => {
+            setTestimonialsLoading(true);
+
+            try {
+                let dataset = await listTestimonials({ status: "published", isFeatured: true, limit: 6 });
+
+                if (dataset.length === 0) {
+                    dataset = await listTestimonials({ status: "published", limit: 6 });
+                }
+
+                if (cancelled) {
+                    return;
+                }
+
+                setTestimonials(dataset);
+                setTestimonialsError(null);
+            } catch (error) {
+                if (cancelled) {
+                    return;
+                }
+
+                const message =
+                    error instanceof HttpError ? error.message : "Unable to load testimonials";
+                setTestimonialsError(message);
+                setTestimonials([]);
+            } finally {
+                if (!cancelled) {
+                    setTestimonialsLoading(false);
+                }
+            }
+        };
+
+        void fetchTestimonials();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    const displayTestimonials =
+        testimonials.length > 0
+            ? testimonials.map((item) => ({
+                  key: `testimonial-${item.id}`,
+                  quote: item.quote,
+                  author: item.author,
+                  role: [item.role, item.company].filter(Boolean).join(" · ") || undefined,
+              }))
+            : FALLBACK_TESTIMONIALS.map((item, index) => ({
+                  key: `fallback-${index}`,
+                  quote: item.quote,
+                  author: item.author,
+                  role: item.role,
+              }));
+
+    const testimonialCount = displayTestimonials.length;
+
     return (
         <main className="w-full bg-background text-foreground">
             <section className="relative isolate overflow-hidden py-12">
@@ -401,16 +468,27 @@ export default function Frontend() {
                         <div className="rounded-3xl border border-foreground/12 bg-background/75 p-10 backdrop-blur">
                             <p className="text-sm uppercase tracking-[0.35em] text-foreground/50">Testimonials</p>
                             <div className="mt-8 space-y-8">
-                                {testimonials.map((item, index) => (
-                                    <div key={item.author} className="space-y-4">
-                                        <p className="text-base leading-relaxed text-foreground/80">{item.quote}</p>
-                                        <div className="text-sm text-foreground/60">
-                                            <p className="font-semibold text-foreground/85">{item.author}</p>
-                                            <p>{item.role}</p>
+                                {testimonialsLoading && (
+                                    <div className="text-sm text-foreground/60">Loading testimonials…</div>
+                                )}
+
+                                {!testimonialsLoading &&
+                                    displayTestimonials.map((item, index) => (
+                                        <div key={item.key} className="space-y-4">
+                                            <p className="text-base leading-relaxed text-foreground/80">{item.quote}</p>
+                                            <div className="text-sm text-foreground/60">
+                                                <p className="font-semibold text-foreground/85">{item.author}</p>
+                                                {item.role && <p>{item.role}</p>}
+                                            </div>
+                                            {index < testimonialCount - 1 && (
+                                                <div className="h-px w-full bg-foreground/12" />
+                                            )}
                                         </div>
-                                        {index < testimonials.length - 1 && <div className="h-px w-full bg-foreground/12" />}
-                                    </div>
-                                ))}
+                                    ))}
+
+                                {!testimonialsLoading && testimonialsError && (
+                                    <p className="text-sm text-destructive">{testimonialsError}</p>
+                                )}
                             </div>
                         </div>
                     </div>

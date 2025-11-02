@@ -8,6 +8,13 @@
       "when": 1761925483361,
       "tag": "0000_wet_felicia_hardy",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1762090804974,
+      "tag": "0001_happy_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }

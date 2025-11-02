@@ -29,15 +29,23 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue
 )
 
+type ControllerPropsWithOptionalControl<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>,
+> = Omit<ControllerProps<TFieldValues, TName>, "control"> & {
+  control?: ControllerProps<TFieldValues, TName>["control"]
+}
+
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
+>({ control, ...props }: ControllerPropsWithOptionalControl<TFieldValues, TName>) => {
+  const formContext = useFormContext<TFieldValues>()
+  const resolvedControl = control ?? formContext.control
+
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
+      <Controller control={resolvedControl} {...props} />
     </FormFieldContext.Provider>
   )
 }

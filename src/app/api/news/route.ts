@@ -20,6 +20,7 @@ export async function GET(request: Request) {
     const searchParam = url.searchParams.get("search");
     const limitParam = url.searchParams.get("limit");
     const offsetParam = url.searchParams.get("offset");
+    const slugParam = url.searchParams.get("slug");
 
     let statusFilter: NewsStatus | undefined;
 
@@ -46,7 +47,13 @@ export async function GET(request: Request) {
     const limit = limitParam ? Math.min(100, Math.max(1, Number.parseInt(limitParam, 10))) : 20;
     const offset = offsetParam ? Math.max(0, Number.parseInt(offsetParam, 10) || 0) : 0;
 
-  const filters: Array<ReturnType<typeof eq>> = [];
+    let slugFilter: string | undefined;
+
+    if (slugParam && slugParam.trim()) {
+      slugFilter = slugParam.trim().toLowerCase();
+    }
+
+    const filters: Array<ReturnType<typeof eq>> = [];
 
     if (statusFilter) {
       filters.push(eq(news.status, statusFilter));
@@ -58,6 +65,10 @@ export async function GET(request: Request) {
 
     if (searchParam) {
       filters.push(ilike(news.title, `%${searchParam}%`));
+    }
+
+    if (slugFilter) {
+      filters.push(eq(news.slug, slugFilter));
     }
 
     const baseQuery = db

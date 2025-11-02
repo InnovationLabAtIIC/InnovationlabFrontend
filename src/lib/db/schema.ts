@@ -118,6 +118,7 @@ export const events = pgTable(
     slug: text("slug").notNull(),
     summary: text("summary"),
     description: text("description"),
+    image: text("image"),
     location: text("location"),
     registrationUrl: text("registration_url"),
     isVirtual: boolean("is_virtual").notNull().default(false),

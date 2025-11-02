@@ -6,9 +6,9 @@ import { testimonials, users } from "@/lib/db/schema";
 export const testimonialSelection = {
   id: testimonials.id,
   headline: testimonials.headline,
-  body: testimonials.body,
-  authorName: testimonials.authorName,
-  authorTitle: testimonials.authorTitle,
+  quote: testimonials.body,
+  author: testimonials.authorName,
+  role: testimonials.authorTitle,
   company: testimonials.company,
   avatarUrl: testimonials.avatarUrl,
   isFeatured: testimonials.isFeatured,
@@ -25,6 +25,7 @@ export const testimonialSelection = {
     role: users.role
   }
 } as const;
+
 
 export async function getTestimonialById(id: number) {
   const [record] = await db

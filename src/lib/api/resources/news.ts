@@ -33,3 +33,19 @@ export async function getNewsById(id: number) {
 
   return record ?? null;
 }
+
+export async function getNewsBySlug(slug: string) {
+  const normalized = slug.trim().toLowerCase();
+
+  if (!normalized) {
+    return null;
+  }
+
+  const [record] = await db
+    .select(newsSelection)
+    .from(news)
+    .leftJoin(users, eq(news.authorId, users.id))
+    .where(eq(news.slug, normalized));
+
+  return record ?? null;
+}

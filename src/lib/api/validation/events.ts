@@ -15,6 +15,7 @@ export const createEventSchema = z.object({
   description: z.string().min(1).optional().nullable(),
   location: z.string().max(400).optional().nullable(),
   registrationUrl: z.string().url().max(2048).optional().nullable(),
+  image: z.string().url().max(2048).optional().nullable(),
   isVirtual: z.boolean().optional(),
   startsAt: isoDateTime,
   endsAt: isoDateTime.optional().nullable(),

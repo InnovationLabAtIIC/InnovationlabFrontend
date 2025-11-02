@@ -49,12 +49,12 @@ export default async function DashboardLayout({
 export function AppSidebar() {
     const items = [
         { title: "Home", url: "#", icon: Home },
-        { title: "News", url: "#", icon: Inbox },
-        { title: "Events", url: "#", icon: Calendar },
-        { title: "About", url: "#", icon: UsersIcon },
-        { title: "Testimonials", url: "#", icon: UsersIcon },
-        { title: "Users", url: "#", icon: UsersIcon },
-        { title: "Settings", url: "#", icon: Settings },
+        { title: "News", url: "/dashboard/news", icon: Inbox },
+        { title: "Events", url: "/dashboard/events", icon: Calendar },
+        //{ title: "About", url: "#", icon: UsersIcon },
+        { title: "Testimonials", url: "/dashboard/testimonials", icon: UsersIcon },
+        { title: "Users", url: "/dashboard/users", icon: UsersIcon },
+        //{ title: "Settings", url: "#", icon: Settings },
     ];
 
     return (

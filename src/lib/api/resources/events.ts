@@ -11,6 +11,7 @@ export const eventSelection = {
   description: events.description,
   location: events.location,
   registrationUrl: events.registrationUrl,
+  image: events.image,
   isVirtual: events.isVirtual,
   startsAt: events.startsAt,
   endsAt: events.endsAt,

@@ -32,6 +32,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const statusParam = url.searchParams.get("status");
+    const slugParam = url.searchParams.get("slug");
     const organizerParam = url.searchParams.get("organizerId");
     const virtualParam = url.searchParams.get("isVirtual");
     const searchParam = url.searchParams.get("search");
@@ -72,6 +73,16 @@ export async function GET(request: Request) {
     const offset = offsetParam ? Math.max(0, Number.parseInt(offsetParam, 10) || 0) : 0;
 
     const filters: Array<ReturnType<typeof eq>> = [];
+
+    if (slugParam) {
+      const normalized = slugParam.trim().toLowerCase();
+
+      if (!normalized) {
+        throw new ApiError(400, "Invalid slug filter");
+      }
+
+      filters.push(eq(events.slug, normalized));
+    }
 
     if (statusFilter) {
       filters.push(eq(events.status, statusFilter));
@@ -162,6 +173,7 @@ export async function POST(request: Request) {
         description: payload.description ?? null,
         location: payload.location?.trim() ?? null,
         registrationUrl: payload.registrationUrl?.trim() ?? null,
+        image: payload.image ? payload.image.trim() : null,
         isVirtual: payload.isVirtual ?? false,
         startsAt,
         endsAt,
