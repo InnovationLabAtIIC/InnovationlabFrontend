@@ -2,11 +2,9 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowUpRight,
-  CalendarClock,
   CalendarDays,
   Clock,
   MapPin,
-  Users,
 } from "lucide-react"
 
 import { resolveApiBaseUrl } from "@/lib/http/resolve-api-base-url"
@@ -160,7 +158,7 @@ export default async function EventsPage() {
 
   try {
     records = await fetchPublishedEvents()
-  } catch (_error) {
+  } catch (e) {
     return (
       <main className="w-full bg-background text-foreground">
         <section className="py-20">
@@ -193,7 +191,7 @@ export default async function EventsPage() {
   }
 
   const spotlightSchedule = formatSchedule(spotlight)
-  const spotlightTags = getEventTags(spotlight)
+  //const spotlightTags = getEventTags(spotlight)
   const spotlightImage = spotlight.image && spotlight.image.trim() ? spotlight.image.trim() : null
   const otherEvents = others
 
@@ -308,7 +306,7 @@ export default async function EventsPage() {
               </p>
             </div>
             <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Don't Miss Out
+              Don&apos;t Miss Out
             </h2>
           </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CalendarDays, Clock, Tag, User } from "lucide-react";
+import { ArrowLeft, CalendarDays, Clock, Tag } from "lucide-react";
 
 import { LexicalRenderer } from "@/components/blocks/editor-x/viewer";
 import { estimateReadingTime, normalizeLexicalState } from "@/lib/editor/lexical-utils";

@@ -143,7 +143,7 @@ function resolveDescriptionContent(description: string | null): DescriptionConte
       : [];
 
     return { lexicalState: trimmed, paragraphs };
-  } catch (_error) {
+  } catch (e) {
     return { lexicalState: null, paragraphs: [trimmed] };
   }
 }

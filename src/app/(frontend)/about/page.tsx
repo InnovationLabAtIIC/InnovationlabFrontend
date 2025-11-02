@@ -249,7 +249,7 @@ export default function AboutPage() {
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-foreground/70">
-                From our founding to today, we've grown into a thriving innovation ecosystem that continues to push boundaries and create impact.
+                From our founding to today, we&apos;ve grown into a thriving innovation ecosystem that continues to push boundaries and create impact.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-8">
                 <div className="border border-foreground/10 p-6">

@@ -2,12 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
-  CalendarDays,
-  Clock,
-  MessageCircle,
-  Sparkles,
-  Tag,
-  User,
 } from "lucide-react";
 
 import { resolveApiBaseUrl } from "@/lib/http/resolve-api-base-url";
