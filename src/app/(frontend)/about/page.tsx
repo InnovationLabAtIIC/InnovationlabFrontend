@@ -105,9 +105,9 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="w-full bg-background text-foreground">;
+    <main className="w-full bg-background text-foreground">
       <section className="relative min-h-[80vh] flex items-center border-b border-foreground/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 w-full">
           <div className="grid gap-20 lg:grid-cols-2 lg:gap-24 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
@@ -170,7 +170,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-32 border-b border-foreground/10">
+      <section className="py-16 border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="space-y-4 mb-16">
             <p className="text-xs uppercase tracking-widest text-foreground/50">Our Foundation</p>
@@ -201,7 +201,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-32 border-b border-foreground/10">
+      <section className="py-16 border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div className="space-y-6">
@@ -238,7 +238,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-32 border-b border-foreground/10">
+      <section className="py-16 border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr]">
             <div className="space-y-6">
@@ -279,7 +279,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-32">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <p className="text-xs uppercase tracking-widest text-foreground/50">Our Impact</p>

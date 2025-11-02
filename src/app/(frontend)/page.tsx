@@ -587,7 +587,7 @@ export default function Frontend() {
 
 
             <section className="relative min-h-[90vh] flex items-center border-b border-foreground/10">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 w-full">
                     <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
                         <div className="space-y-8">
                             <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
@@ -659,7 +659,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32 border-b border-foreground/10">
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
                         <div className="space-y-6">
@@ -710,7 +710,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32 border-b border-foreground/10">
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
                         <div className="space-y-4">
@@ -776,7 +776,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32 border-b border-foreground/10">
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
                         <div className="space-y-4">
@@ -851,7 +851,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32 border-b border-foreground/10">
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
                         <div className="space-y-8">
@@ -914,7 +914,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32 border-b border-foreground/10">
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="space-y-4 mb-16">
                         <p className="text-xs uppercase tracking-widest text-foreground/50">What People Say</p>
@@ -972,7 +972,7 @@ export default function Frontend() {
                 </div>
             </section>
 
-            <section className="py-32">
+            <section className="py-16">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="border border-foreground/10 p-16 lg:p-24">
                         <div className="max-w-3xl mx-auto text-center space-y-8">
