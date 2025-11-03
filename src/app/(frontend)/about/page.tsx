@@ -107,7 +107,7 @@ export default function AboutPage() {
 
   const teamMembers = [
     {
-      name: "Anisha Karki",
+      name: "Manjeyy Gautam",
       role: "Program Director",
       bio: "Guides the lab's long-term strategy and keeps our partnerships aligned with student impact.",
       focusAreas: ["Partnerships", "Program Design"],
