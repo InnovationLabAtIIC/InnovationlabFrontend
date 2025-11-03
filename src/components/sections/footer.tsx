@@ -35,7 +35,7 @@ const menuDefaults: FooterMenuItem[] = [
   {
     title: "Connect",
     links: [
-      { text: "Contact Us", url: "#contact" },
+  { text: "Contact Us", url: "/contact" },
       { text: "Join Community", url: "#" },
       { text: "Support", url: "#" },
       { text: "FAQs", url: "#" },

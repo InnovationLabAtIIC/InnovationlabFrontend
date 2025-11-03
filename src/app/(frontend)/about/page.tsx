@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AboutPage() {
   const missionPanels = [
@@ -102,6 +103,57 @@ export default function AboutPage() {
     { value: "12+", label: "Years of momentum", icon: Trophy },
     { value: "50+", label: "Collaborators", icon: Users },
     { value: "25", label: "Awards & honours", icon: Globe },
+  ];
+
+  const teamMembers = [
+    {
+      name: "Anisha Karki",
+      role: "Program Director",
+      bio: "Guides the lab's long-term strategy and keeps our partnerships aligned with student impact.",
+      focusAreas: ["Partnerships", "Program Design"],
+      image:
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      name: "Rohan Sharma",
+      role: "Lead Technologist",
+      bio: "Oversees technical residencies and mentors builders on systems architecture and emerging tech.",
+      focusAreas: ["AI & ML", "Systems Architecture"],
+      image:
+        "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      name: "Samita Rai",
+      role: "Community Catalyst",
+      bio: "Designs inclusive programs and ensures every voice in the lab has a platform to thrive.",
+      focusAreas: ["Community", "Inclusion"],
+      image:
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      name: "Bikash Adhikari",
+      role: "Prototype Mentor",
+      bio: "Helps teams move from concept to build with lean experimentation and rapid validation loops.",
+      focusAreas: ["Prototyping", "Product Coaching"],
+      image:
+        "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      name: "Shreya Lama",
+      role: "Design Research Lead",
+      bio: "Bridges human insights with product decisions so solutions stay grounded in real needs.",
+      focusAreas: ["UX Research", "Civic Tech"],
+      image:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      name: "Prabin Gurung",
+      role: "Operations & Lab Steward",
+      bio: "Keeps the maker floor running, from hardware inventories to late-night hackathon logistics.",
+      focusAreas: ["Lab Operations", "Mentor Networks"],
+      image:
+        "https://images.unsplash.com/photo-1544723795-3fbec0f5b39b?auto=format&fit=crop&w=400&q=80",
+    },
   ];
 
   return (
@@ -303,6 +355,66 @@ export default function AboutPage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 border-t border-foreground/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center space-y-4 mb-16">
+            <p className="text-xs uppercase tracking-widest text-foreground/50">Our Team</p>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              Meet the people powering the lab
+            </h2>
+            <p className="text-sm max-w-3xl mx-auto leading-relaxed text-foreground/70">
+              A multidisciplinary crew of mentors, makers, and strategists keeps Innovation Lab humming—from vision and research to day-to-day student support.
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+            {teamMembers.map((member) => (
+              <div
+                key={member.name}
+                className="border border-foreground/10 bg-background/70 p-6 hover:border-foreground/30 transition-colors flex flex-col gap-6"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative h-16 w-16 overflow-hidden rounded-full border border-foreground/20 bg-muted/40 flex-shrink-0">
+                    {member.image ? (
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center text-lg font-semibold text-foreground/60">
+                        {member.name.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground/90">{member.name}</h3>
+                    <p className="text-xs uppercase tracking-widest text-foreground/50">
+                      {member.role}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-sm leading-relaxed text-foreground/70">{member.bio}</p>
+
+                <div className="flex flex-wrap gap-2">
+                  {member.focusAreas.map((area) => (
+                    <span
+                      key={`${member.name}-${area}`}
+                      className="inline-flex items-center gap-2 border border-foreground/20 bg-foreground/5 px-3 py-1 text-xs uppercase tracking-wider text-foreground/60"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

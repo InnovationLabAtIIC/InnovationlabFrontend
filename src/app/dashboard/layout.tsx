@@ -33,6 +33,9 @@ export default async function DashboardLayout({
 
     return (
         <html suppressHydrationWarning>
+            <head>
+                <title>IVLABS ADMIN DASHBOARD</title>
+            </head>
             <body>
                 <SidebarProvider>
                     <AppSidebar />
