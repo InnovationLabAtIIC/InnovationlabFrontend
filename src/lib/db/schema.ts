@@ -172,6 +172,45 @@ export const testimonials = pgTable(
   })
 );
 
+export const communities = pgTable(
+  "communities",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    description: text("description"),
+    coverImageUrl: text("cover_image_url"),
+    createdAt: timestampWithDefaults("created_at"),
+    updatedAt: timestampWithDefaults("updated_at")
+  },
+  table => ({
+    slugIdx: uniqueIndex("communities_slug_unique").on(table.slug)
+  })
+);
+
+export const communityMembers = pgTable(
+  "community_members",
+  {
+    id: serial("id").primaryKey(),
+    communityId: integer("community_id")
+      .notNull()
+      .references(() => communities.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    title: text("title"),
+    role: text("role"),
+    year: text("year"),
+    rank: integer("rank"),
+    imageUrl: text("image_url"),
+    bio: text("bio"),
+    createdAt: timestampWithDefaults("created_at"),
+    updatedAt: timestampWithDefaults("updated_at")
+  },
+  table => ({
+    communityIdx: index("community_members_community_idx").on(table.communityId),
+    rankIdx: index("community_members_rank_idx").on(table.rank)
+  })
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   news: many(news),
   events: many(events),
@@ -204,5 +243,16 @@ export const userSessionsRelations = relations(userSessions, ({ one }) => ({
   user: one(users, {
     fields: [userSessions.userId],
     references: [users.id]
+  })
+}));
+
+export const communitiesRelations = relations(communities, ({ many }) => ({
+  members: many(communityMembers)
+}));
+
+export const communityMembersRelations = relations(communityMembers, ({ one }) => ({
+  community: one(communities, {
+    fields: [communityMembers.communityId],
+    references: [communities.id]
   })
 }));

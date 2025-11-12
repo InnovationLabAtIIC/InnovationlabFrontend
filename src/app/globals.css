@@ -4,10 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -49,7 +49,7 @@
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(61.643% 0.17234 149.392);
+  --primary: oklch(57.878% 0.23169 259.655);
   --primary-foreground: oklch(0.985 0.001 106.423);
   --secondary: oklch(0.97 0.001 106.424);
   --secondary-foreground: oklch(0.216 0.006 56.043);
@@ -113,8 +113,37 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    border-radius: 0 !important;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+  }
+  
+  /* Remove all rounded corners globally */
+  button,
+  input,
+  select,
+  textarea,
+  div,
+  section,
+  article,
+  aside,
+  nav,
+  header,
+  footer {
+    border-radius: 0 !important;
+  }
+}
+
+/* Custom utilities for sharp geometric design */
+@layer utilities {
+  .sharp-border {
+    border-radius: 0 !important;
+  }
+  
+  .hard-edge {
+    clip-path: none !important;
+    border-radius: 0 !important;
   }
 }

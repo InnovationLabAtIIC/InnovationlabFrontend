@@ -54,6 +54,7 @@ export function AppSidebar() {
         { title: "Home", url: "#", icon: Home },
         { title: "News", url: "/dashboard/news", icon: Inbox },
         { title: "Events", url: "/dashboard/events", icon: Calendar },
+        { title: "Communities", url: "/dashboard/communities", icon: UsersIcon },
         //{ title: "About", url: "#", icon: UsersIcon },
         { title: "Testimonials", url: "/dashboard/testimonials", icon: UsersIcon },
         { title: "Users", url: "/dashboard/users", icon: UsersIcon },
