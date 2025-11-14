@@ -20,6 +20,7 @@ import {
     Lightbulb,
     Code2,
     Briefcase,
+    Calendar,
 } from "lucide-react";
 
 import { HttpError } from "@/lib/http/api-client";
@@ -587,12 +588,82 @@ export default function Frontend() {
 
     return (
         <main className="w-full bg-background text-foreground">
-            <HeroCarousel />
-            <section className="border-b border-foreground/10 relative">
-                {/* <GridM className="absolute -top-16 left-0" config={[[1,1,1],[1]]} /> */}
+            <section className="relative min-h-[90vh] flex items-center border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 w-full">
+                    <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
+                        <div className="space-y-8">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/20 text-xs uppercase tracking-widest text-foreground/70">
+                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                Itahari International College
+                            </div>
+
+                            <div className="space-y-6">
+                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+                                    INNOVATION
+                                    <br />
+                                    <span className="text-foreground/60">LAB</span>
+                                </h1>
+                                <p className="text-xl leading-relaxed text-foreground/70 max-w-xl">
+                                    Transforming bold ideas into real-world solutions through technology, creativity, and collaborative innovation.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4">
+                                <Button size="lg" className="px-8 text-sm uppercase tracking-wider">
+                                    Explore Projects
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="px-8 text-sm uppercase tracking-wider"
+                                >
+                                    Get Involved
+                                </Button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-4">
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Target className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">500+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Projects</p>
+                                </div>
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Users className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">50+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Members</p>
+                                </div>
+                            </div>
+                            <div className="space-y-4 pt-12">
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Trophy className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">25</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Awards</p>
+                                </div>
+                                <div className="border border-foreground/10 p-8 hover:border-foreground/30 transition-colors">
+                                    <div className="w-12 h-12 mb-6 flex items-center justify-center border border-foreground/20">
+                                        <Calendar className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2">12+</h3>
+                                    <p className="text-sm uppercase tracking-wider text-foreground/60">Years</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-                        <div className="space-y-6 py-16">
+                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+                        <div className="space-y-6">
                             <div className="space-y-4">
                                 <p className="text-xs uppercase tracking-widest text-foreground/50">What We Do</p>
                                 <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
@@ -604,7 +675,7 @@ export default function Frontend() {
                             </p>
                         </div>
 
-                        <div className="grid grid-rows-2 grid-cols-2">
+                        <div className="space-y-6">
                             {[
                                 {
                                     icon: Lightbulb,
@@ -620,16 +691,11 @@ export default function Frontend() {
                                     icon: Briefcase,
                                     title: "Project Execution",
                                     description: "Transform ideas into fully-realized projects with mentorship and industry-standard practices."
-                                },
-                                {
-                                    icon: Briefcase,
-                                    title: "Project Execution",
-                                    description: "Transform ideas into fully-realized projects with mentorship and industry-standard practices."
                                 }
                             ].map((item, index) => {
                                 const Icon = item.icon;
                                 return (
-                                    <div key={index} className="border-2 border-foreground/20 pl-6 py-2 flex-1 h-full">
+                                    <div key={index} className="border-l-2 border-foreground/20 pl-6 py-2">
                                         <div className="flex items-start gap-4">
                                             <Icon className="h-6 w-6 mt-1 flex-shrink-0" />
                                             <div>

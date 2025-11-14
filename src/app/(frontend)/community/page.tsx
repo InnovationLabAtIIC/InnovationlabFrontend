@@ -10,6 +10,7 @@ import type {
   CommunityMemberRecord,
   CommunityWithMembers,
 } from "@/lib/types/communities";
+import { ArrowRight, Calendar, Target, Trophy, Users } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Community | Innovation Labs",
@@ -263,18 +264,6 @@ export default async function CommunityPage() {
   return (
     <main className="w-full bg-background text-foreground">
       <section className="relative overflow-hidden border-b border-foreground/10">
-        {featuredImage ? (
-          <Image
-            src={featuredImage}
-            alt={featured.name}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-        ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.15),_transparent)]" />
-        )}
 
         <div className="absolute inset-0 bg-background/85" />
 

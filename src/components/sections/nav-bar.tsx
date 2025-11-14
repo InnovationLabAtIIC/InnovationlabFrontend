@@ -39,18 +39,15 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-screen transition-all duration-300",
-        isTop
-          ? "border-b-0"
-          : " bg-primary-foreground backdrop-blur-sm"
+        "sticky top-0 z-50 w-screen bg-primary-foreground backdrop-blur-sm"
       )}
     >
       <div className={cn("mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 z-99", isTop ? "py-6" : "py-4")}>
         <Link
           href="/"
           className={cn(
-            "flex items-center gap-3 text-md font-bold uppercase tracking-widest",
-            isTop ? "text-white" : "text-foreground"
+            "flex items-center gap-3 text-md font-bold uppercase tracking-widest text-foreground",
+            
           )}
         >
           <span className={cn("flex h-10 w-10 items-center justify-center text-xs font-bold transition-colors duration-300 border", isTop ? "border-white/20" : "border-foreground/20")}>
@@ -65,8 +62,7 @@ export function Navbar() {
               key={item.label}
               href={item.href}
               className={cn(
-                "px-5 py-2 text-md uppercase tracking-wider transition-colors",
-                isTop ? "text-white/80 hover:text-white" : "text-foreground/70 hover:text-foreground"
+                "px-5 py-2 text-md uppercase tracking-wider transition-colors hover:text-foreground"
               )}
             >
               {item.label}
