@@ -20,6 +20,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { Calendar, Home, Inbox, Settings, UsersIcon } from "lucide-react";
 
 import "../globals.css";
+import { Button } from "@/components/ui/button";
 
 export default async function DashboardLayout({
     children,
@@ -29,6 +30,22 @@ export default async function DashboardLayout({
 
     if (!session) {
         redirect("/login");
+    }
+
+
+    const logout = async () => {
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Credentials": "include"
+                },
+            })
+        } catch (err) {
+            console.error("[login]", err)
+        } finally {
+        }
     }
 
     return (
@@ -88,7 +105,9 @@ export function AppSidebar() {
                         </SidebarGroupContent>
                     </SidebarGroup>
                 </SidebarContent>
-                <SidebarFooter />
+                <SidebarFooter>
+                    <Button>Logout</Button>
+                </SidebarFooter>
             </Sidebar>
         </ThemeProvider>
     );
