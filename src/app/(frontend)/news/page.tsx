@@ -1,18 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { desc, eq } from "drizzle-orm";
 
-import { resolveApiBaseUrl } from "@/lib/http/resolve-api-base-url";
-import type { NewsRecord } from "@/lib/types/news";
 import { estimateReadingTime, normalizeLexicalState } from "@/lib/editor/lexical-utils";
+import { db } from "@/lib/db";
+import { news, users } from "@/lib/db/schema";
+import { newsSelection } from "@/lib/api/resources/news";
+import type { NewsRecord } from "@/lib/types/news";
 
 export const revalidate = 60;
-
-interface NewsApiResponse {
-  data: NewsRecord[];
-}
 
 interface NewsPresentation {
   slug: string;
@@ -25,23 +22,24 @@ interface NewsPresentation {
   chips: string[];
 }
 
-async function fetchPublishedNews(): Promise<NewsRecord[]> {
-  const baseUrl = resolveApiBaseUrl();
-  const url = new URL("/api/news", baseUrl);
-  url.searchParams.set("status", "published");
-  url.searchParams.set("limit", "12");
+const toIso = (value: Date) => value.toISOString();
+const toIsoNullable = (value: Date | null) => (value ? value.toISOString() : null);
 
-  const response = await fetch(url.toString(), {
-    next: { revalidate },
-    cache: "force-cache",
-  });
+async function loadPublishedNews(): Promise<NewsRecord[]> {
+  const rows = await db
+    .select(newsSelection)
+    .from(news)
+    .leftJoin(users, eq(news.authorId, users.id))
+    .where(eq(news.status, "published"))
+    .orderBy(desc(news.publishedAt), desc(news.createdAt))
+    .limit(12);
 
-  if (!response.ok) {
-    throw new Error(`Failed to load news: ${response.status} ${response.statusText}`);
-  }
-
-  const payload = (await response.json()) as NewsApiResponse;
-  return payload.data;
+  return rows.map((item) => ({
+    ...item,
+    createdAt: toIso(item.createdAt),
+    updatedAt: toIso(item.updatedAt),
+    publishedAt: toIsoNullable(item.publishedAt)
+  }));
 }
 
 function formatPublishedDate(record: NewsRecord) {
@@ -103,7 +101,7 @@ export default async function NewsPage() {
   let records: NewsRecord[] = [];
 
   try {
-    records = await fetchPublishedNews();
+    records = await loadPublishedNews();
   } catch (_error) {
     return (
       <main className="w-full bg-background text-foreground">

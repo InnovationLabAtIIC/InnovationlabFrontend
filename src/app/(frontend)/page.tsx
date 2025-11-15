@@ -1,8 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { and, desc, eq } from "drizzle-orm";
+
 import { Button } from "@/components/ui/button";
 import {
     ArrowUpRight,
@@ -23,14 +22,23 @@ import {
     Calendar,
 } from "lucide-react";
 
-import { HttpError } from "@/lib/http/api-client";
-import { listTestimonials } from "@/lib/http/testimonials";
-import { listNews } from "@/lib/http/news";
-import { listEvents } from "@/lib/http/events";
 import { normalizeLexicalState, estimateReadingTime } from "@/lib/editor/lexical-utils";
+import { db } from "@/lib/db";
+import {
+    events,
+    galleryImages,
+    news,
+    testimonials,
+    users,
+} from "@/lib/db/schema";
+import { testimonialSelection } from "@/lib/api/resources/testimonials";
+import { newsSelection } from "@/lib/api/resources/news";
+import { eventSelection } from "@/lib/api/resources/events";
+import { galleryImageSelection } from "@/lib/api/resources/gallery-images";
 import { type TestimonialRecord } from "@/lib/types/testimonials";
 import { type NewsRecord } from "@/lib/types/news";
 import { type EventRecord } from "@/lib/types/events";
+import { type GalleryImageRecord } from "@/lib/types/gallery-images";
 
 interface NewsItem {
     image: string | null;
@@ -155,6 +163,141 @@ const FALLBACK_TESTIMONIALS: FallbackTestimonial[] = [
         role: "Still invisible",
     },
 ];
+
+const FALLBACK_GALLERY: string[] = [
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1600&q=80",
+];
+
+type DataResult<T> = {
+    items: T[];
+    fromDb: boolean;
+    error: string | null;
+};
+
+const toIso = (value: Date) => value.toISOString();
+const toIsoNullable = (value: Date | null) => (value ? value.toISOString() : null);
+
+async function loadTestimonials(): Promise<DataResult<TestimonialRecord>> {
+    try {
+        const limit = 6;
+
+        const featured = await db
+            .select(testimonialSelection)
+            .from(testimonials)
+            .leftJoin(users, eq(testimonials.submittedById, users.id))
+            .where(and(eq(testimonials.status, "published"), eq(testimonials.isFeatured, true)))
+            .orderBy(desc(testimonials.publishedAt), desc(testimonials.createdAt))
+            .limit(limit);
+
+        const normalizedFeatured: TestimonialRecord[] = featured.map((item) => ({
+            ...item,
+            createdAt: toIso(item.createdAt),
+            updatedAt: toIso(item.updatedAt),
+            publishedAt: toIsoNullable(item.publishedAt)
+        }));
+
+        if (normalizedFeatured.length > 0) {
+            return { items: normalizedFeatured, fromDb: true, error: null };
+        }
+
+        const published = await db
+            .select(testimonialSelection)
+            .from(testimonials)
+            .leftJoin(users, eq(testimonials.submittedById, users.id))
+            .where(eq(testimonials.status, "published"))
+            .orderBy(desc(testimonials.publishedAt), desc(testimonials.createdAt))
+            .limit(limit);
+
+        const normalizedPublished: TestimonialRecord[] = published.map((item) => ({
+            ...item,
+            createdAt: toIso(item.createdAt),
+            updatedAt: toIso(item.updatedAt),
+            publishedAt: toIsoNullable(item.publishedAt)
+        }));
+
+        return { items: normalizedPublished, fromDb: normalizedPublished.length > 0, error: null };
+    } catch (error) {
+        console.error("[homepage] loadTestimonials", error);
+        return { items: [], fromDb: false, error: "Unable to load testimonials" };
+    }
+}
+
+async function loadNews(): Promise<DataResult<NewsRecord>> {
+    try {
+        const dataset = await db
+            .select(newsSelection)
+            .from(news)
+            .leftJoin(users, eq(news.authorId, users.id))
+            .where(eq(news.status, "published"))
+            .orderBy(desc(news.publishedAt), desc(news.createdAt))
+            .limit(6);
+
+        const normalized: NewsRecord[] = dataset.map((item) => ({
+            ...item,
+            createdAt: toIso(item.createdAt),
+            updatedAt: toIso(item.updatedAt),
+            publishedAt: toIsoNullable(item.publishedAt)
+        }));
+
+        return { items: normalized, fromDb: normalized.length > 0, error: null };
+    } catch (error) {
+        console.error("[homepage] loadNews", error);
+        return { items: [], fromDb: false, error: "Unable to load news" };
+    }
+}
+
+async function loadEvents(): Promise<DataResult<EventRecord>> {
+    try {
+        const dataset = await db
+            .select(eventSelection)
+            .from(events)
+            .leftJoin(users, eq(events.organizerId, users.id))
+            .where(eq(events.status, "published"))
+            .orderBy(desc(events.startsAt))
+            .limit(24);
+
+        const normalized: EventRecord[] = dataset.map((item) => ({
+            ...item,
+            startsAt: toIso(item.startsAt),
+            endsAt: toIsoNullable(item.endsAt),
+            createdAt: toIso(item.createdAt),
+            updatedAt: toIso(item.updatedAt),
+            publishedAt: toIsoNullable(item.publishedAt)
+        }));
+
+        return { items: normalized, fromDb: normalized.length > 0, error: null };
+    } catch (error) {
+        console.error("[homepage] loadEvents", error);
+        return { items: [], fromDb: false, error: "Unable to load events" };
+    }
+}
+
+async function loadGallery(): Promise<DataResult<GalleryImageRecord>> {
+    try {
+        const dataset = await db
+            .select(galleryImageSelection)
+            .from(galleryImages)
+            .leftJoin(users, eq(galleryImages.addedById, users.id))
+            .orderBy(desc(galleryImages.createdAt))
+            .limit(12);
+
+        const normalized: GalleryImageRecord[] = dataset.map((item) => ({
+            ...item,
+            createdAt: toIso(item.createdAt),
+            updatedAt: toIso(item.updatedAt)
+        }));
+
+        return { items: normalized, fromDb: normalized.length > 0, error: null };
+    } catch (error) {
+        console.error("[homepage] loadGallery", error);
+        return { items: [], fromDb: false, error: "Unable to load gallery images" };
+    }
+}
 
 const capabilityTiles = [
     {
@@ -428,140 +571,23 @@ function mapEventRecord(event: EventRecord): EventItem {
     };
 }
 
-import HeroCarousel from "@/components/sections/hero-carousel";
-import { GridM } from "@/components/grid-m";
+export default async function Frontend() {
+    const [testimonialsResult, newsResult, eventsResult, galleryResult] = await Promise.all([
+        loadTestimonials(),
+        loadNews(),
+        loadEvents(),
+        loadGallery(),
+    ]);
 
-export default function Frontend() {
-    const [testimonials, setTestimonials] = useState<TestimonialRecord[]>([]);
-    const [testimonialsLoading, setTestimonialsLoading] = useState(true);
-    const [testimonialsError, setTestimonialsError] = useState<string | null>(null);
-    const [newsCards, setNewsCards] = useState<NewsItem[]>(FALLBACK_NEWS);
-    const [newsLoading, setNewsLoading] = useState(true);
-    const [newsError, setNewsError] = useState<string | null>(null);
-    const [newsFromApi, setNewsFromApi] = useState(false);
-    const [eventCards, setEventCards] = useState<EventItem[]>(FALLBACK_EVENTS);
-    const [eventsLoading, setEventsLoading] = useState(true);
-    const [eventsError, setEventsError] = useState<string | null>(null);
-    const [eventsFromApi, setEventsFromApi] = useState(false);
+    const testimonials = testimonialsResult.items;
+    const newsRecords = newsResult.items;
+    const eventRecords = eventsResult.items;
+    const galleryRecords = galleryResult.items;
 
-    useEffect(() => {
-        let cancelled = false;
-
-        const fetchTestimonials = async () => {
-            setTestimonialsLoading(true);
-
-            try {
-                let dataset = await listTestimonials({ status: "published", isFeatured: true, limit: 6 });
-
-                if (dataset.length === 0) {
-                    dataset = await listTestimonials({ status: "published", limit: 6 });
-                }
-
-                if (cancelled) {
-                    return;
-                }
-
-                setTestimonials(dataset);
-                setTestimonialsError(null);
-            } catch (error) {
-                if (cancelled) {
-                    return;
-                }
-
-                const message =
-                    error instanceof HttpError ? error.message : "Unable to load testimonials";
-                setTestimonialsError(message);
-                setTestimonials([]);
-            } finally {
-                if (!cancelled) {
-                    setTestimonialsLoading(false);
-                }
-            }
-        };
-
-        const fetchNews = async () => {
-            setNewsLoading(true);
-
-            try {
-                const dataset = await listNews({ status: "published", limit: 6 });
-
-                if (cancelled) {
-                    return;
-                }
-
-                const sorted = sortNewsRecords(dataset);
-                const selected = sorted.slice(0, 3);
-
-                if (selected.length > 0) {
-                    setNewsCards(selected.map(mapNewsRecord));
-                    setNewsFromApi(true);
-                    setNewsError(null);
-                } else {
-                    setNewsCards(FALLBACK_NEWS);
-                    setNewsFromApi(false);
-                    setNewsError(null);
-                }
-            } catch (error) {
-                if (cancelled) {
-                    return;
-                }
-
-                const message = error instanceof HttpError ? error.message : "Unable to load news";
-                setNewsError(message);
-                setNewsCards(FALLBACK_NEWS);
-                setNewsFromApi(false);
-            } finally {
-                if (!cancelled) {
-                    setNewsLoading(false);
-                }
-            }
-        };
-
-        const fetchEvents = async () => {
-            setEventsLoading(true);
-
-            try {
-                const dataset = await listEvents({ status: "published", limit: 12 });
-
-                if (cancelled) {
-                    return;
-                }
-
-                const selected = pickHomepageEvents(dataset);
-
-                if (selected.length > 0) {
-                    setEventCards(selected.map(mapEventRecord));
-                    setEventsFromApi(true);
-                    setEventsError(null);
-                } else {
-                    setEventCards(FALLBACK_EVENTS);
-                    setEventsFromApi(false);
-                    setEventsError(null);
-                }
-            } catch (error) {
-                if (cancelled) {
-                    return;
-                }
-
-                const message = error instanceof HttpError ? error.message : "Unable to load events";
-                setEventsError(message);
-                setEventCards(FALLBACK_EVENTS);
-                setEventsFromApi(false);
-            } finally {
-                if (!cancelled) {
-                    setEventsLoading(false);
-                }
-            }
-        };
-
-        void fetchTestimonials();
-        void fetchNews();
-        void fetchEvents();
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
+    const testimonialsError = testimonialsResult.error;
+    const newsError = newsResult.error;
+    const eventsError = eventsResult.error;
+    const galleryError = galleryResult.error;
 
     const displayTestimonials =
         testimonials.length > 0
@@ -580,15 +606,46 @@ export default function Frontend() {
                 role: item.role,
             }));
 
-    const testimonialCount = displayTestimonials.length;
-    const primaryNews = newsCards[0] ?? null;
-    const secondaryNews = primaryNews ? newsCards.slice(1) : [];
-    const showNewsArchiveNotice = !newsError && !newsLoading && !newsFromApi;
-    const showEventsArchiveNotice = !eventsError && !eventsLoading && !eventsFromApi;
+    const sortedNews = sortNewsRecords(newsRecords);
+    const selectedNews = sortedNews.slice(0, 3);
+    const newsCards = selectedNews.length > 0 ? selectedNews.map(mapNewsRecord) : FALLBACK_NEWS;
+    const newsFromDb = selectedNews.length > 0 && newsResult.fromDb;
+
+    const selectedEvents = pickHomepageEvents(eventRecords);
+    const eventCards = selectedEvents.length > 0 ? selectedEvents.map(mapEventRecord) : FALLBACK_EVENTS;
+    const eventsFromDb = selectedEvents.length > 0 && eventsResult.fromDb;
+
+    const mappedGallery = galleryRecords
+        .map((item) => {
+            const url = safeUrl(item.imageUrl);
+
+            if (!url) {
+                return null;
+            }
+
+            return {
+                key: `gallery-${item.id}`,
+                url,
+            };
+        })
+        .filter((item): item is { key: string; url: string } => Boolean(item));
+
+    const galleryItems =
+        mappedGallery.length > 0
+            ? mappedGallery
+            : FALLBACK_GALLERY.map((url, index) => ({
+                key: `gallery-fallback-${index}`,
+                url,
+            }));
+    const galleryFromDb = mappedGallery.length > 0 && galleryResult.fromDb;
+
+    const showNewsArchiveNotice = !newsError && !newsFromDb;
+    const showEventsArchiveNotice = !eventsError && !eventsFromDb;
+    const showGalleryArchiveNotice = !galleryError && !galleryFromDb;
 
     return (
         <main className="w-full bg-background text-foreground">
-            <section className="relative min-h-[90vh] flex items-center border-b border-foreground/10">
+            <section className="relative min-h-[100vh] flex items-center border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 w-full">
                     <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
                         <div className="space-y-8">
@@ -917,14 +974,53 @@ export default function Frontend() {
 
             <section className="py-16 border-b border-foreground/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-16">
+                        <div className="space-y-4 max-w-2xl">
+                            <p className="text-xs uppercase tracking-widest text-foreground/50">Inside the Lab</p>
+                            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Image Gallery</h2>
+                            <p className="text-lg leading-relaxed text-foreground/70">
+                                Snapshots from our workshops, build nights, and demo days. Drop by often to see what the team is
+                                experimenting with next.
+                            </p>
+                        </div>
+                        {showGalleryArchiveNotice && (
+                            <p className="text-sm text-foreground/60 border border-foreground/10 px-4 py-3 lg:max-w-sm">
+                                The gallery is showcasing a curated highlight reel while we prep the latest uploads.
+                            </p>
+                        )}
+                    </div>
+
+                    {galleryError && (
+                        <p className="mb-8 text-sm text-destructive border border-destructive/20 p-4">
+                            {galleryError}
+                        </p>
+                    )}
+
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {galleryItems.map((item) => (
+                            <div
+                                key={item.key}
+                                className="group relative aspect-[4/3] overflow-hidden border border-foreground/10 hover:border-foreground/30"
+                            >
+                                <Image
+                                    src={item.url}
+                                    alt="Innovation Lab gallery highlight"
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 25vw"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-16 border-b border-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="space-y-4 mb-16">
                         <p className="text-xs uppercase tracking-widest text-foreground/50">What People Say</p>
                         <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Testimonials</h2>
                     </div>
-
-                    {testimonialsLoading && (
-                        <div className="text-center text-foreground/60 py-12">Loading testimonials...</div>
-                    )}
 
                     {testimonialsError && (
                         <p className="text-sm text-destructive border border-destructive/20 p-4 mb-8">
@@ -933,42 +1029,41 @@ export default function Frontend() {
                     )}
 
                     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {!testimonialsLoading &&
-                            displayTestimonials.map((item: any) => (
-                                <div
-                                    key={item.key}
-                                    className="border border-foreground/10 p-8 space-y-6 hover:border-foreground/30 transition-colors"
-                                >
-                                    <p className="text-base leading-relaxed text-foreground/80">
-                                        "{item.quote}"
-                                    </p>
-                                    <div className="pt-4 border-t border-foreground/10 flex items-center gap-4">
-                                        {item.image ? (
-                                            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden border border-foreground/20">
-                                                <Image
-                                                    src={item.image}
-                                                    alt={item.author}
-                                                    fill
-                                                    className="object-cover"
-                                                    sizes="48px"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div className="h-12 w-12 flex-shrink-0 border border-foreground/20 flex items-center justify-center bg-foreground/5">
-                                                <span className="text-sm font-semibold text-foreground/60">
-                                                    {item.author.charAt(0).toUpperCase()}
-                                                </span>
-                                            </div>
-                                        )}
-                                        <div>
-                                            <p className="font-semibold text-foreground/90">{item.author}</p>
-                                            {item.role && (
-                                                <p className="text-sm text-foreground/60 mt-1">{item.role}</p>
-                                            )}
+                        {displayTestimonials.map((item: any) => (
+                            <div
+                                key={item.key}
+                                className="border border-foreground/10 p-8 space-y-6 hover:border-foreground/30 transition-colors"
+                            >
+                                <p className="text-base leading-relaxed text-foreground/80">
+                                    "{item.quote}"
+                                </p>
+                                <div className="pt-4 border-t border-foreground/10 flex items-center gap-4">
+                                    {item.image ? (
+                                        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden border border-foreground/20">
+                                            <Image
+                                                src={item.image}
+                                                alt={item.author}
+                                                fill
+                                                className="object-cover"
+                                                sizes="48px"
+                                            />
                                         </div>
+                                    ) : (
+                                        <div className="h-12 w-12 flex-shrink-0 border border-foreground/20 flex items-center justify-center bg-foreground/5">
+                                            <span className="text-sm font-semibold text-foreground/60">
+                                                {item.author.charAt(0).toUpperCase()}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div>
+                                        <p className="font-semibold text-foreground/90">{item.author}</p>
+                                        {item.role && (
+                                            <p className="text-sm text-foreground/60 mt-1">{item.role}</p>
+                                        )}
                                     </div>
                                 </div>
-                            ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>

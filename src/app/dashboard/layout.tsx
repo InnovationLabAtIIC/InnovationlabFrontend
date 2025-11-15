@@ -17,7 +17,7 @@ import {
 import { getSessionUser } from "@/lib/auth/service";
 import { ThemeProvider } from "@/providers/theme-provider";
 
-import { Calendar, Home, Inbox, Settings, UsersIcon } from "lucide-react";
+import { Calendar, Home, Images, Inbox, Settings, UsersIcon } from "lucide-react";
 
 import "../globals.css";
 import { Button } from "@/components/ui/button";
@@ -71,6 +71,7 @@ export function AppSidebar() {
         { title: "Home", url: "#", icon: Home },
         { title: "News", url: "/dashboard/news", icon: Inbox },
         { title: "Events", url: "/dashboard/events", icon: Calendar },
+        { title: "Gallery", url: "/dashboard/gallery", icon: Images },
         { title: "Communities", url: "/dashboard/communities", icon: UsersIcon },
         //{ title: "About", url: "#", icon: UsersIcon },
         { title: "Testimonials", url: "/dashboard/testimonials", icon: UsersIcon },

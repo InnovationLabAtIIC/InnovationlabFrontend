@@ -1,38 +1,35 @@
 import Image from "next/image"
 import Link from "next/link"
-import {
-  ArrowUpRight,
-  CalendarDays,
-  Clock,
-  MapPin,
-} from "lucide-react"
+import { ArrowUpRight, CalendarDays, Clock, MapPin } from "lucide-react"
+import { desc, eq } from "drizzle-orm"
 
-import { resolveApiBaseUrl } from "@/lib/http/resolve-api-base-url"
+import { db } from "@/lib/db"
+import { events, users } from "@/lib/db/schema"
+import { eventSelection } from "@/lib/api/resources/events"
 import type { EventRecord } from "@/lib/types/events"
 
 export const revalidate = 60
 
-interface EventsApiResponse {
-  data: EventRecord[]
-}
+const toIso = (value: Date) => value.toISOString()
+const toIsoNullable = (value: Date | null) => (value ? value.toISOString() : null)
 
-async function fetchPublishedEvents(): Promise<EventRecord[]> {
-  const baseUrl = resolveApiBaseUrl()
-  const url = new URL("/api/events", baseUrl)
-  url.searchParams.set("status", "published")
-  url.searchParams.set("limit", "12")
+async function loadPublishedEvents(): Promise<EventRecord[]> {
+  const rows = await db
+    .select(eventSelection)
+    .from(events)
+    .leftJoin(users, eq(events.organizerId, users.id))
+    .where(eq(events.status, "published"))
+    .orderBy(desc(events.startsAt))
+    .limit(12)
 
-  const response = await fetch(url.toString(), {
-    next: { revalidate },
-    cache: "force-cache",
-  })
-
-  if (!response.ok) {
-    throw new Error(`Failed to load events: ${response.status} ${response.statusText}`)
-  }
-
-  const payload = (await response.json()) as EventsApiResponse
-  return payload.data
+  return rows.map((item) => ({
+    ...item,
+    startsAt: toIso(item.startsAt),
+    endsAt: toIsoNullable(item.endsAt),
+    createdAt: toIso(item.createdAt),
+    updatedAt: toIso(item.updatedAt),
+    publishedAt: toIsoNullable(item.publishedAt)
+  }))
 }
 
 function getStartTimestamp(event: EventRecord) {
@@ -157,7 +154,7 @@ export default async function EventsPage() {
   let records: EventRecord[] = []
 
   try {
-    records = await fetchPublishedEvents()
+    records = await loadPublishedEvents()
   } catch (e) {
     return (
       <main className="w-full bg-background text-foreground">

@@ -211,6 +211,23 @@ export const communityMembers = pgTable(
   })
 );
 
+export const galleryImages = pgTable(
+  "gallery_images",
+  {
+    id: serial("id").primaryKey(),
+    imageUrl: text("image_url").notNull(),
+    addedById: integer("added_by_id").references(() => users.id, {
+      onDelete: "set null"
+    }),
+    createdAt: timestampWithDefaults("created_at"),
+    updatedAt: timestampWithDefaults("updated_at")
+  },
+  table => ({
+    addedByIdx: index("gallery_images_added_by_idx").on(table.addedById),
+    createdAtIdx: index("gallery_images_created_at_idx").on(table.createdAt)
+  })
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   news: many(news),
   events: many(events),
@@ -254,5 +271,12 @@ export const communityMembersRelations = relations(communityMembers, ({ one }) =
   community: one(communities, {
     fields: [communityMembers.communityId],
     references: [communities.id]
+  })
+}));
+
+export const galleryImagesRelations = relations(galleryImages, ({ one }) => ({
+  addedBy: one(users, {
+    fields: [galleryImages.addedById],
+    references: [users.id]
   })
 }));

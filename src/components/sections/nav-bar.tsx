@@ -39,15 +39,15 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-screen bg-primary-foreground backdrop-blur-sm"
+        "fixed top-0 z-50 w-screen bg-primary-foreground backdrop-blur-sm"
       )}
     >
-      <div className={cn("mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 z-99", isTop ? "py-6" : "py-4")}>
+      <div className={cn("mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 z-99 py-4")}>
         <Link
           href="/"
           className={cn(
             "flex items-center gap-3 text-md font-bold uppercase tracking-widest text-foreground",
-            
+
           )}
         >
           <span className={cn("flex h-10 w-10 items-center justify-center text-xs font-bold transition-colors duration-300 border", isTop ? "border-white/20" : "border-foreground/20")}>
@@ -72,7 +72,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-4">
           <ModeToggle />
-          <Button className={cn("hidden px-6 text-xs uppercase tracking-wider md:inline-flex", isTop ? "text-white" : "") }>
+          <Button className={cn("hidden px-6 text-xs uppercase tracking-wider md:inline-flex", isTop ? "text-white" : "")}>
             Get Started
           </Button>
           <Button
