@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getSessionUser } from "@/lib/auth/service";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { DashboardLogout } from "@/components/dashboard-logout";
 
 import { Calendar, Home, Inbox, Settings, UsersIcon } from "lucide-react";
 
@@ -51,7 +52,7 @@ export default async function DashboardLayout({
 
 export function AppSidebar() {
     const items = [
-        { title: "Home", url: "#", icon: Home },
+        { title: "Home", url: "/dashboard", icon: Home },
         { title: "News", url: "/dashboard/news", icon: Inbox },
         { title: "Events", url: "/dashboard/events", icon: Calendar },
         //{ title: "About", url: "#", icon: UsersIcon },
@@ -87,7 +88,13 @@ export function AppSidebar() {
                         </SidebarGroupContent>
                     </SidebarGroup>
                 </SidebarContent>
-                <SidebarFooter />
+                <SidebarFooter>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <DashboardLogout />
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarFooter>
             </Sidebar>
         </ThemeProvider>
     );
